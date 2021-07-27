@@ -915,9 +915,9 @@ class CrossingMindsApiClient
 
         :param dict item: item ID and properties {'item_id': ID, *<property_name: property_value>}
         */
-        $item = (array)($item);
+        $item = (array)$item;
         $item_id = $this->_itemid2url($item['item_id']);
-		unset($user['item_id']);
+		unset($item['item_id']);
         $path = "items/{$item_id}/";
         $data = [
             'item'=> $item,
