@@ -1363,10 +1363,11 @@ class CrossingMindsApiClient
 	}
 
     # === Data Dump Storage ===
-/*
-    @require_login
-    def get_data_dump_signed_urls(self, name, content_type, resource):
-        """
+
+    //@require_login
+    function get_data_dump_signed_urls($name, $content_type, $resource)
+	{
+        /*
         Get signed url to upload a file. (url_upload and url_report)
 
         :param str? name: filename
@@ -1376,18 +1377,20 @@ class CrossingMindsApiClient
             'url_upload': str,
             'url_report': str,
         }
-        """
-        path = f'data-dump-storage/signed-url/'
-        params = {'name': name,
-                  'content_type': content_type,
-                  'resource': resource}
-        return $this->api->get(path=path, params=params)
+        */
+        $path = 'data-dump-storage/signed-url/';
+        $params = ['name'=> $name,
+                  'content_type'=> $content_type,
+                  'resource'=> $resource];
+        return $this->api->get($path, $params);
+	}
 
     # === Scheduled Background Tasks ===
 
-    @require_login
-    def trigger_background_task(self, task_name, payload=null):
-        """
+    //@require_login
+    function trigger_background_task($task_name, $payload=null)
+	{
+        /*
         Trigger background task such as retraining of ML models.
         You should not have to call this endpoint yourself, as this is done automatically.
 
@@ -1398,16 +1401,18 @@ class CrossingMindsApiClient
         }
         :raises: DuplicatedError with error name 'TASK_ALREADY_RUNNING'
             if this task is already running
-        """
-        path = f'tasks/{$this->escape_url(task_name)}/'
-        data = {}
-        if payload:
-            data['payload'] = payload
-        return $this->api->post(path=path, data=data)
+        */
+        $path = "tasks/{$this->escape_url($task_name)}/";
+        $data = [];
+        if ($payload)
+            $data['payload'] = $payload;
+        return $this->api->post($path, $data);
+	}
 
-    @require_login
-    def get_background_tasks(self, task_name):
-        """
+    //@require_login
+    function get_background_tasks($task_name)
+	{
+        /*
         List currently running background tasks such as ML models training.
 
         :param str task_name: for instance ``'ml_model_retrain'``
@@ -1418,27 +1423,30 @@ class CrossingMindsApiClient
                 'details': dict, Execution details, like progress message
             }],
         }
-        """
-        path = f'tasks/{$this->escape_url(task_name)}/recents/'
-        return $this->api->get(path=path)
+        */
+        $path = "tasks/{$this->escape_url($task_name)}/recents/";
+        return $this->api->get($path);
+	}
 
-    def wait_until_ready(self, timeout=600, sleep=1):
-        """
+    function wait_until_ready($timeout=600, $sleep=1)
+	{
+        /*
         Wait until the current database status is ready, meaning at least one model has been trained
 
         :param int? timeout: maximum time to wait, raise RuntimeError if exceeded (default: 10min)
         :param int? sleep: time to wait between polling (default: 1s)
-        """
-        assert sleep > 0.1
-        resp = null
-        time_start = time.time()
+        */
+        assert($sleep > 0.1);
+        $resp = null;
+        /*time_start = time.time()
         while time.time() - time_start < timeout:
             time.sleep(sleep)
             resp = $this->status()
             if resp['status'] == 'ready':
                 return
-        raise RuntimeError(f'API not ready before {timeout}s. Last response: {resp}')
-
+        raise RuntimeError(f'API not ready before {timeout}s. Last response: {resp}')*/
+	}
+/*
     @require_login
     def trigger_and_wait_background_task(self, task_name, timeout=600, lock_wait_timeout=null,
                                          sleep=1, verbose=null):
