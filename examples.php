@@ -104,8 +104,22 @@ $client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l
 //$ret = $client->list_item_properties();
 //$ret = $client->delete_item_property("feature1");
 
-//$ret = $client->create_or_update_item(['item_id'=>'6264785', 'feature1'=>68543]);
-$ret = $client->get_item('6264785');
+//$ret = $client->create_or_update_item(['item_id'=>4264735, 'feature1'=>68543]);
+//$ret = $client->get_item(4264735);
+
+//$ret = $client->list_items([4264735]);
+$ret = $client->list_items_paginated(); // Not working?
+/*
+$ret = $client->create_or_update_items_bulk([
+          [
+              "item_id"=> 4242576,
+              "feature1"=> 25,
+          ],
+          [
+              "item_id"=> 3585426,
+              "feature1"=> 32,
+          ]
+      ]);*/
 
 print_r ($ret);
 

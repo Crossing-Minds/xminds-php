@@ -127,6 +127,7 @@ class _BaseCrossingMindsApiRequest
         if ($status_code >= 500)
         {
             $exc_payload = $this->_parse_response($resp, True);
+			print_r([$status_code, $resp]);
             //if ($exc_payload)
             //    logging.error(exc_payload);
             throw new ServerError();

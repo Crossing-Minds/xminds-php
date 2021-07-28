@@ -33,12 +33,14 @@ class XMindsError extends Exception
 
 # === Server Errors ===
 
-
-class ServerError(XMindsError):
-    MSG = 'Unknown error from server'
-    CODE = 0
-    HTTP_STATUS = 500
-
+*/
+class ServerError extends XMindsError
+{
+/*    MSG = 'Unknown error from server';
+    CODE = 0;
+    HTTP_STATUS = 500;*/
+}
+/*
 
 class ServerUnavailable(XMindsError):
     MSG = 'The server is currently unavailable, please try again later'

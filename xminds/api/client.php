@@ -827,7 +827,7 @@ class CrossingMindsApiClient
 
     //@require_login
     function get_item($item_id)
-	{
+    {
         /*
         Get one item given its ID.
 
@@ -844,11 +844,12 @@ class CrossingMindsApiClient
         $resp = $this->api->get($path);
         $resp['item']['item_id'] = $this->_body2itemid($resp['item']['item_id']);
         return $resp;
-	}
-/*
-    @require_login
-    def list_items(self, items_id):
-        """
+    }
+
+    //@require_login
+    function list_items($items_id)
+    {
+        /*
         Get multiple items given their IDs.
         The items in the response are not aligned with the input.
         In particular this endpoint does not raise NotFoundError if any item in missing.
@@ -866,17 +867,19 @@ class CrossingMindsApiClient
                     }>
                 }
         }
-        """
-        items_id = $this->_itemid2body(items_id)
-        path = f'items-bulk/list/'
-        data = {'items_id': items_id}
-        resp = $this->api.post(path=path, data=data)
-        resp['items'] = $this->_body2itemid(resp['items'])
-        return resp
+        */
+        $items_id = $this->_itemid2body($items_id);
+        $path = 'items-bulk/list/';
+        $data = ['items_id'=> $items_id];
+        $resp = $this->api->post($path, $data);
+        $resp['items'] = $this->_body2itemid($resp['items']);
+        return $resp;
+    }
 
-    @require_login
-    def list_items_paginated(self, amt=null, cursor=null):
-        """
+    //@require_login
+    function list_items_paginated($amt=null, $cursor=null)
+    {
+        /*
         Get multiple items by page.
         The response is paginated, you can control the response amount and offset
         using the query parameters ``amt`` and ``cursor``.
@@ -896,17 +899,18 @@ class CrossingMindsApiClient
             'has_next': bool,
             'next_cursor': str, pagination cursor to use in next request to get more items,
         }
-        """
-        path = f'items-bulk/'
-        params = {}
-        if amt:
-            params['amt'] = amt
-        if cursor:
-            params['cursor'] = cursor
-        resp = $this->api.get(path=path, params=params)
-        resp['items'] = $this->_body2itemid(resp['items'])
-        return resp
-*/
+        */
+        $path = 'items-bulk/';
+        $params = [];
+        if ($amt != null)
+            $params['amt'] = $amt;
+        if ($cursor != null)
+            $params['cursor'] = $cursor;
+        $resp = $this->api->get($path, $params);
+        $resp['items'] = $this->_body2itemid($resp['items']);
+        return $resp;
+    }
+
     //@require_login
     function create_or_update_item($item)
     {
@@ -917,17 +921,18 @@ class CrossingMindsApiClient
         */
         $item = (array)$item;
         $item_id = $this->_itemid2url($item['item_id']);
-		unset($item['item_id']);
+        unset($item['item_id']);
         $path = "items/{$item_id}/";
         $data = [
             'item'=> $item,
         ];
         return $this->api->put($path, $data);
     }
-/*
-    @require_login
-    def create_or_update_items_bulk(self, items, items_m2m=null, chunk_size=(1<<10)):
-        """
+
+    //@require_login
+    function create_or_update_items_bulk($items, $items_m2m=null, $chunk_size=(1<<10))
+    {
+        /*
         Create many items in bulk, or update the ones for which the id already exist.
 
         :param array items: array with fields ['id': ID, *<property_name: value_type>]
@@ -940,15 +945,19 @@ class CrossingMindsApiClient
                 }>
             }
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
-        """
-        path = f'items-bulk/'
-        for items_chunk, items_m2m_chunk in $this->_chunk_items(items, items_m2m, chunk_size):
-            data = {
-                'items': items_chunk,
-                'items_m2m': items_m2m_chunk,
-            }
-            $this->api.put(path=path, data=data, timeout=60)
-
+        */
+        $path = 'items-bulk/';
+        $chunks = $this->_chunk_items($items, $items_m2m, $chunk_size);
+        foreach ($chunks as list($items_chunk, $items_m2m_chunk))
+        {
+            $data = [
+                'items'=> $items_chunk,
+                'items_m2m'=> $items_m2m_chunk,
+            ];
+            $this->api->put($path, $data, $timeout=60);
+        }
+    }
+/*
     @require_login
     def partial_update_item(self, item, create_if_missing=null):
         """
@@ -995,37 +1004,49 @@ class CrossingMindsApiClient
             data['items'] = items_chunk
             data['items_m2m'] = items_m2m_chunk
             $this->api.patch(path=path, data=data, timeout=60)
-
-    def _chunk_items(self, items, items_m2m, chunk_size):
-        items_m2m = items_m2m or []
-        # cast dict to list of dict
-        if isinstance(items_m2m, dict):
-            items_m2m = [{'name': name, 'array': array}
-                         for name, array in items_m2m.items()]
-        n_chunks = int(numpy.ceil(len(items) / chunk_size))
-        for i in tqdm(range(n_chunks), disable=(True if n_chunks < 4 else null)):
-            start_idx = i * chunk_size
-            end_idx = (i + 1) * chunk_size
-            items_chunk = items[start_idx:end_idx]
+*/
+    function _chunk_items($items, $items_m2m, $chunk_size)
+	{
+        $items_m2m = $items_m2m ?? [];
+        // cast dict to list of dict
+        if (is_array($items_m2m))
+		{
+            $items_m2m = [];
+			foreach ($items_m2m as $name=> $array)
+				array_push($items_m2m, ['name'=> $name, 'array'=> $array]);
+		}
+        $n_chunks = (int)(ceil(count($items) / $chunk_size));
+		$out = [];
+        for ($i=0; $i<$n_chunks; $i++)
+		{
+            $start_idx = $i * $chunk_size;
+            $end_idx = ($i + 1) * $chunk_size;
+			$items_chunk = array_slice($items, $start_idx, $chunk_size);
             # split M2M array-optimized if any
-            items_m2m_chunk = []
-            for m2m in items_m2m:
-                array = m2m['array']
-                if isinstance(array, numpy.ndarray):
+            $items_m2m_chunk = [];
+            foreach ($items_m2m as $m2m)
+			{
+                $array = $m2m['array'];
+                /*if isinstance(array, numpy.ndarray):
                     mask = (array['item_index'] >= start_idx) & (array['item_index'] < end_idx)
                     array_chunk = array[mask]  # does copy
                     array_chunk['item_index'] -= start_idx
                 else:
                     logging.warning('array-optimized many-to-many format is not efficient '
-                                    'with JSON. Use numpy arrays and pkl serializer instead')
-                    array_chunk = [
-                        {'item_index': row['item_index'] - start_idx, 'value_id': row['value_id']}
-                        for row in array
-                        if start_idx <= row['item_index'] < end_idx
-                    ]
-                items_m2m_chunk.append({'name': m2m['name'], 'array': array_chunk})
-            yield $this->_itemid2body(items_chunk), items_m2m_chunk
-
+                                    'with JSON. Use numpy arrays and pkl serializer instead')*/
+		        $array_chunk = [];
+				foreach ($array as $row)
+				{
+					if ($start_idx <= $row['item_index'] and $row['item_index'] < $end_idx)
+		            	array_push($array_chunk, ['item_index'=> $row['item_index'] - $start_idx, 'value_id'=> $row['value_id']]);
+				}
+                array_push($items_m2m_chunk, ['name'=> $m2m['name'], 'array'=> $array_chunk]);
+			}
+            array_push($out, [$this->_itemid2body($items_chunk), $items_m2m_chunk]);
+		}
+		return $out;
+	}
+/*
     # === Reco: Item-to-item ===
 
     @require_login
