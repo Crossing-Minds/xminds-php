@@ -602,7 +602,7 @@ class CrossingMindsApiClient
             $params['amt'] = $amt;
         if ($cursor)
             $params['cursor'] = $cursor;
-        $resp = $this->api.get($path, $params);
+        $resp = $this->api->get($path, $params);
         $resp['users'] = $this->_body2userid($resp['users']);
         return $resp;
     }
@@ -1055,12 +1055,13 @@ class CrossingMindsApiClient
 		}
 		return $out;
 	}
-/*
+
     # === Reco: Item-to-item ===
 
-    @require_login
-    def get_reco_item_to_items(self, item_id, amt=null, cursor=null, filters=null):
-        """
+    //@require_login
+    function get_reco_item_to_items($item_id, $amt=null, $cursor=null, $filters=null)
+	{
+        /*
         Get similar items.
 
         :param ID item_id: item ID
@@ -1071,26 +1072,28 @@ class CrossingMindsApiClient
             'items_id': array of items IDs,
             'next_cursor': str, pagination cursor to use in next request to get more items,
         }
-        """
-        item_id = $this->_itemid2url(item_id)
-        path = f'recommendation/items/{item_id}/items/'
-        params = {}
-        if amt:
-            params['amt'] = amt
-        if cursor:
-            params['cursor'] = cursor
-        if filters:
-            params['filters'] = filters
-        resp = $this->api.get(path=path, params=params)
-        resp['items_id'] = $this->_body2itemid(resp['items_id'])
-        return resp
+        */
+        $item_id = $this->_itemid2url($item_id);
+        $path = "recommendation/items/{$item_id}/items/";
+        $params = [];
+        if ($amt)
+            $params['amt'] = $amt;
+        if ($cursor)
+            $params['cursor'] = $cursor;
+        if ($filters)
+            $params['filters'] = $filters;
+        $resp = $this->api->get($path, $params);
+        $resp['items_id'] = $this->_body2itemid($resp['items_id']);
+        return $resp;
+	}
 
     # === Reco: Session-to-item ===
 
-    @require_login
-    def get_reco_session_to_items(self, ratings=null, user_properties=null,
-                                  amt=null, cursor=null, filters=null, exclude_rated_items=null):
-        """
+    //@require_login
+    function get_reco_session_to_items($ratings=null, $user_properties=null,
+                                  $amt=null, $cursor=null, $filters=null, $exclude_rated_items=null)
+	{
+        /*
         Get items recommendations given the ratings of an anonymous session.
 
         :param array? ratings: ratings array with fields ['item_id': ID, 'rating': float]
@@ -1103,31 +1106,33 @@ class CrossingMindsApiClient
             'items_id': array of items IDs,
             'next_cursor': str, pagination cursor to use in next request to get more items,
         }
-        """
-        path = f'recommendation/sessions/items/'
-        data = {}
-        if ratings is not null:
-            data['ratings'] = $this->_itemid2body(ratings)
-        if user_properties:
-            data['user_properties'] = user_properties
-        if amt:
-            data['amt'] = amt
-        if cursor:
-            data['cursor'] = cursor
-        if filters:
-            data['filters'] = filters
-        if exclude_rated_items is not null:
-            data['exclude_rated_items'] = exclude_rated_items
-        resp = $this->api.post(path=path, data=data)
-        resp['items_id'] = $this->_body2itemid(resp['items_id'])
-        return resp
+        */
+        $path = 'recommendation/sessions/items/';
+        $data = [];
+        if ($ratings != null)
+            $data['ratings'] = $this->_itemid2body($ratings);
+        if ($user_properties)
+            $data['user_properties'] = $user_properties;
+        if ($amt)
+            $data['amt'] = $amt;
+        if ($cursor)
+            $data['cursor'] = $cursor;
+        if ($filters)
+            $data['filters'] = $filters;
+        if ($exclude_rated_items != null)
+            $data['exclude_rated_items'] = $exclude_rated_items;
+        $resp = $this->api->post($path, $data);
+        $resp['items_id'] = $this->_body2itemid(resp['items_id']);
+        return $resp;
+	}
 
     # === Reco: User-to-item ===
 
-    @require_login
-    def get_reco_user_to_items(self, user_id, amt=null, cursor=null, filters=null,
-                               exclude_rated_items=null):
-        """
+    //@require_login
+    function get_reco_user_to_items($user_id, $amt=null, $cursor=null, $filters=null,
+                               $exclude_rated_items=null)
+	{
+        /*
         Get items recommendations given a user ID.
 
         :param ID user_id: user ID
@@ -1139,27 +1144,29 @@ class CrossingMindsApiClient
             'items_id': array of items IDs,
             'next_cursor': str, pagination cursor to use in next request to get more items,
         }
-        """
-        user_id = $this->_userid2url(user_id)
-        path = f'recommendation/users/{user_id}/items/'
-        params = {}
-        if amt:
-            params['amt'] = amt
-        if cursor:
-            params['cursor'] = cursor
-        if filters:
-            params['filters'] = filters
-        if exclude_rated_items is not null:
-            params['exclude_rated_items'] = exclude_rated_items
-        resp = $this->api.get(path=path, params=params)
-        resp['items_id'] = $this->_body2itemid(resp['items_id'])
-        return resp
+        */
+        $user_id = $this->_userid2url($user_id);
+        $path = "recommendation/users/{$user_id}/items/";
+        $params = [];
+        if ($amt)
+            $params['amt'] = $amt;
+        if ($cursor)
+            $params['cursor'] = $cursor;
+        if ($filters)
+            $params['filters'] = $filters;
+        if ($exclude_rated_items != null)
+            $params['exclude_rated_items'] = $exclude_rated_items;
+        $resp = $this->api->get($path, $params);
+        $resp['items_id'] = $this->_body2itemid($resp['items_id']);
+        return $resp;
+	}
 
     # === User Ratings ===
 
-    @require_login
-    def create_or_update_rating(self, user_id, item_id, rating, timestamp=null):
-        """
+    //@require_login
+    function create_or_update_rating($user_id, $item_id, $rating, $timestamp=null)
+	{
+        /*
         Create or update a rating for a user and an item.
         If the rating exists for the tuple (user_id, item_id) then it is updated,
         otherwise it is created.
@@ -1168,56 +1175,64 @@ class CrossingMindsApiClient
         :param ID item_id: item ID
         :param float rating: rating value
         :param float? timestamp: rating timestamp (default: now)
-        """
-        user_id = $this->_userid2url(user_id)
-        item_id = $this->_itemid2url(item_id)
-        path = f'users/{user_id}/ratings/{item_id}/'
-        data = {
-            'rating': rating,
-        }
-        if timestamp is not null:
-            data['timestamp'] = timestamp
-        return $this->api.put(path=path, data=data)
+        */
+        $user_id = $this->_userid2url($user_id);
+        $item_id = $this->_itemid2url($item_id);
+        $path = "users/{$user_id}/ratings/{$item_id}/";
+        $data = [
+            'rating'=> $rating,
+        ];
+        if ($timestamp != null)
+            $data['timestamp'] = $timestamp;
+        return $this->api->put($path, $data);
+	}
 
-    @require_login
-    def create_or_update_user_ratings_bulk(self, user_id, ratings):
-        """
+    //@require_login
+    function create_or_update_user_ratings_bulk($user_id, $ratings)
+	{
+        /*
         Create or update bulks of ratings for a single user and many items.
 
         :param ID user_id: user ID
         :param array ratings: ratings array with fields:
             ['item_id': ID, 'rating': float, 'timestamp': float]
-        """
-        user_id = $this->_userid2url(user_id)
-        path = f'users/{user_id}/ratings/'
-        data = {
-            'ratings': $this->_itemid2body(ratings),
-        }
-        return $this->api.put(path=path, data=data, timeout=10)
+        */
+        $user_id = $this->_userid2url($user_id);
+        $path = "users/{$user_id}/ratings/";
+        $data = [
+            'ratings'=> $this->_itemid2body($ratings),
+        ];
+        return $this->api->put($path, $data, ['timeout'=>10]);
+	}
 
-    @require_login
-    def create_or_update_ratings_bulk(self, ratings, chunk_size=(1<<14)):
-        """
+    //@require_login
+    function create_or_update_ratings_bulk($ratings, $chunk_size=(1<<14))
+	{	
+        /*
         Create or update large bulks of ratings for many users and many items.
 
         :param array ratings: ratings array with fields:
             ['user_id': ID, 'item_id': ID, 'rating': float, 'timestamp': float]
         :param int? chunk_size: split the requests in chunks of this size (default: 16K)
-        """
-        path = f'ratings-bulk/'
-        n_chunks = int(numpy.ceil(len(ratings) / chunk_size))
-        for i in tqdm(range(n_chunks), disable=(True if n_chunks < 4 else null)):
-            ratings_chunk = ratings[i*chunk_size:(i+1)*chunk_size]
-            ratings_chunk = $this->_userid2body($this->_itemid2body(ratings_chunk))
-            data = {
-                'ratings': ratings_chunk,
-            }
-            $this->api.put(path=path, data=data, timeout=60)
-        return
+        */
+        $path = 'ratings-bulk/';
+        $n_chunks = (int)(ceil(count($ratings) / $chunk_size));
+        for ($i=0; $i<$n_chunks; $i++)
+		{
+			$ratings_chunk = array_slice($ratings, $i*$chunk_size, $chunk_size);
+            $ratings_chunk = $this->_userid2body($this->_itemid2body($ratings_chunk));
+            $data = [
+                'ratings'=> $ratings_chunk,
+            ];
+            $this->api->put($path, $data, ['timeout'=>60]);
+		}
+        return;
+	}
 
-    @require_login
-    def list_user_ratings(self, user_id, amt=null, page=null):
-        """
+    //@require_login
+    function list_user_ratings($user_id, $amt=null, $page=null)
+	{
+        /*
         List the ratings of one user (paginated)
 
         :param ID user_id: user ID
@@ -1229,18 +1244,20 @@ class CrossingMindsApiClient
             'user_ratings': ratings array with fields
                 ['item_id': ID, 'rating': float, 'timestamp': float]
         }
-        """
-        user_id = $this->_userid2url(user_id)
-        path = f'users/{user_id}/ratings/'
-        params = {}
-        if amt:
-            params['amt'] = amt
-        if page:
-            params['page'] = page
-        resp = $this->api.get(path=path, params=params)
-        resp['user_ratings'] = $this->_body2itemid(resp['user_ratings'])
-        return resp
+        */
+        $user_id = $this->_userid2url($user_id);
+        $path = "users/{$user_id}/ratings/";
+        $params = [];
+        if ($amt)
+            $params['amt'] = $amt;
+        if ($page)
+            $params['page'] = $page;
+        $resp = $this->api->get($path, $params);
+        $resp['user_ratings'] = $this->_body2itemid($resp['user_ratings']);
+        return $resp;
+	}
 
+/*
     @require_login
     def list_ratings(self, amt=null, cursor=null):
         """
@@ -1261,7 +1278,7 @@ class CrossingMindsApiClient
             params['amt'] = amt
         if cursor:
             params['cursor'] = cursor
-        resp = $this->api.get(path=path, params=params)
+        resp = $this->api->get(path=path, params=params)
         resp['ratings'] = $this->_body2userid($this->_body2itemid(resp['ratings']))
         return resp
 
@@ -1276,7 +1293,7 @@ class CrossingMindsApiClient
         user_id = $this->_userid2url(user_id)
         item_id = $this->_itemid2url(item_id)
         path = f'users/{user_id}/ratings/{item_id}'
-        return $this->api.delete(path=path)
+        return $this->api->delete(path=path)
 
     @require_login
     def delete_user_ratings(self, user_id):
@@ -1287,7 +1304,7 @@ class CrossingMindsApiClient
         """
         user_id = $this->_userid2url(user_id)
         path = f'users/{user_id}/ratings/'
-        return $this->api.delete(path=path)
+        return $this->api->delete(path=path)
 
     # === User Interactions ===
 
@@ -1311,7 +1328,7 @@ class CrossingMindsApiClient
         }
         if timestamp is not null:
             data['timestamp'] = timestamp
-        return $this->api.post(path=path, data=data)
+        return $this->api->post(path=path, data=data)
 
     @require_login
     def create_interactions_bulk(self, interactions, chunk_size=(1<<14)):
@@ -1331,7 +1348,7 @@ class CrossingMindsApiClient
             data = {
                 'interactions': interactions_chunk,
             }
-            $this->api.post(path=path, data=data, timeout=10)
+            $this->api->post(path=path, data=data, timeout=10)
         return
 
     # === Data Dump Storage ===
@@ -1353,7 +1370,7 @@ class CrossingMindsApiClient
         params = {'name': name,
                   'content_type': content_type,
                   'resource': resource}
-        return $this->api.get(path=path, params=params)
+        return $this->api->get(path=path, params=params)
 
     # === Scheduled Background Tasks ===
 
@@ -1375,7 +1392,7 @@ class CrossingMindsApiClient
         data = {}
         if payload:
             data['payload'] = payload
-        return $this->api.post(path=path, data=data)
+        return $this->api->post(path=path, data=data)
 
     @require_login
     def get_background_tasks(self, task_name):
@@ -1392,7 +1409,7 @@ class CrossingMindsApiClient
         }
         """
         path = f'tasks/{$this->escape_url(task_name)}/recents/'
-        return $this->api.get(path=path)
+        return $this->api->get(path=path)
 
     def wait_until_ready(self, timeout=600, sleep=1):
         """

@@ -156,6 +156,15 @@ $ret = $client->create_or_update_items_bulk([
       ]);*/
 
 
+//$ret = $client->get_reco_item_to_items(784567); //Not tested
+//$ret = $client->get_reco_session_to_items(); //Not tested
+//$ret = $client->get_reco_user_to_items(784567); //Not tested
+
+//$ret = $client->create_or_update_rating(464737, 784567, 5);
+//$ret = $client->create_or_update_user_ratings_bulk(464737, [['item_id'=> 464737, 'rating'=> 2.4, 'timestamp'=>1588812345], ['item_id'=> 784567, 'rating'=> 3.2, 'timestamp'=>1588812345]]);
+//$ret = $client->create_or_update_ratings_bulk([['user_id'=> 464737, 'item_id'=> 464737, 'rating'=> 5.2, 'timestamp'=> 1588812345], ['user_id'=> 464737, 'item_id'=> 784567, 'rating'=> 3.9, 'timestamp'=> 1588812345]]);
+$ret = $client->list_user_ratings(464737);
+
 
 print_r ($ret);
 
