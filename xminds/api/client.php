@@ -1257,10 +1257,10 @@ class CrossingMindsApiClient
         return $resp;
 	}
 
-/*
-    @require_login
-    def list_ratings(self, amt=null, cursor=null):
-        """
+    //@require_login
+    function list_ratings($amt=null, $cursor=null)
+	{
+        /*
         List the ratings of one database
 
         :param int? amt: amount to return (default: use the API default)
@@ -1271,46 +1271,52 @@ class CrossingMindsApiClient
             'ratings': array with fields
                 ['item_id': ID, 'user_id': ID, 'rating': float, 'timestamp': float]
         }
-        """
-        path = f'ratings-bulk/'
-        params = {}
-        if amt:
-            params['amt'] = amt
-        if cursor:
-            params['cursor'] = cursor
-        resp = $this->api->get(path=path, params=params)
-        resp['ratings'] = $this->_body2userid($this->_body2itemid(resp['ratings']))
-        return resp
+        */
+        $path = 'ratings-bulk/';
+        $params = [];
+        if ($amt)
+            $params['amt'] = $amt;
+        if ($cursor)
+            $params['cursor'] = $cursor;
+        $resp = $this->api->get($path, $params);
+        $resp['ratings'] = $this->_body2userid($this->_body2itemid($resp['ratings']));
+        return resp;
+	}
 
-    @require_login
-    def delete_rating(self, user_id, item_id):
-        """
+    //@require_login
+    function delete_rating($user_id, $item_id)
+	{
+        /*
         Delete a single rating for a given user.
 
         :param ID user_id: user ID
         :param ID item_id: item ID
-        """
-        user_id = $this->_userid2url(user_id)
-        item_id = $this->_itemid2url(item_id)
-        path = f'users/{user_id}/ratings/{item_id}'
-        return $this->api->delete(path=path)
+        */
+        $user_id = $this->_userid2url($user_id);
+        $item_id = $this->_itemid2url($item_id);
+        $path = "users/{$user_id}/ratings/{$item_id}";
+        return $this->api->delete($path);
+	}
 
-    @require_login
-    def delete_user_ratings(self, user_id):
-        """
+    //@require_login
+    function delete_user_ratings($user_id)
+	{
+        /*
         Delete all ratings of a given user.
 
         :param ID user_id: user ID
-        """
-        user_id = $this->_userid2url(user_id)
-        path = f'users/{user_id}/ratings/'
-        return $this->api->delete(path=path)
+        */
+        $user_id = $this->_userid2url($user_id);
+        $path = "users/{$user_id}/ratings/";
+        return $this->api->delete($path);
+	}
 
     # === User Interactions ===
 
-    @require_login
-    def create_interaction(self, user_id, item_id, interaction_type, timestamp=null):
-        """
+    //@require_login
+    function create_interaction($user_id, $item_id, $interaction_type, $timestamp=null)
+	{
+        /*
         This endpoint allows you to create a new interaction for a user and an item.
         An inferred rating will be created or updated for the tuple (user_id, item_id).
         The taste profile of the user will then be updated in real-time by the online machine learning algorithm.
@@ -1319,40 +1325,45 @@ class CrossingMindsApiClient
         :param ID item_id: item ID
         :param str interaction_type: Interaction type
         :param float? timestamp: rating timestamp (default: now)
-        """
-        user_id = $this->_userid2url(user_id)
-        item_id = $this->_itemid2url(item_id)
-        path = f'users/{user_id}/interactions/{item_id}/'
-        data = {
-            'interaction_type': interaction_type,
-        }
-        if timestamp is not null:
-            data['timestamp'] = timestamp
-        return $this->api->post(path=path, data=data)
+        */
+        $user_id = $this->_userid2url($user_id);
+        $item_id = $this->_itemid2url($item_id);
+        $path = "users/{$user_id}/interactions/{$item_id}/";
+        $data = [
+            'interaction_type'=> $interaction_type,
+        ];
+        if ($timestamp != null)
+            $data['timestamp'] = $timestamp;
+        return $this->api->post($path, $data);
+	}
 
-    @require_login
-    def create_interactions_bulk(self, interactions, chunk_size=(1<<14)):
-        """
+    //@require_login
+    function create_interactions_bulk($interactions, $chunk_size=(1<<14))
+	{
+        /*
         Create or update large bulks of interactions for many users and many items.
         Inferred ratings will be created or updated for all tuples (user_id, item_id).
 
         :param array interactions: interactions array with fields:
             ['user_id': ID, 'item_id': ID, 'interaction_type': str, 'timestamp': float]
         :param int? chunk_size: split the requests in chunks of this size (default: 16K)
-        """
-        path = f'interactions-bulk/'
-        n_chunks = int(numpy.ceil(len(interactions) / chunk_size))
-        for i in tqdm(range(n_chunks), disable=(True if n_chunks < 4 else null)):
-            interactions_chunk = interactions[i*chunk_size:(i+1)*chunk_size]
-            interactions_chunk = $this->_userid2body($this->_itemid2body(interactions_chunk))
-            data = {
-                'interactions': interactions_chunk,
-            }
-            $this->api->post(path=path, data=data, timeout=10)
-        return
+        */
+        $path = 'interactions-bulk/';
+        $n_chunks = (int)(ceil(count($interactions) / $chunk_size));
+        for ($i=0; $i<$n_chunks; $i++)
+		{
+			$interactions_chunk = array_slice($interactions, $i*$chunk_size, $chunk_size);
+            $interactions_chunk = $this->_userid2body($this->_itemid2body($interactions_chunk));
+            $data = [
+                'interactions'=> $interactions_chunk,
+            ];
+            $this->api->post($path, $data, ['timeout'=>10]);
+		}
+        return;
+	}
 
     # === Data Dump Storage ===
-
+/*
     @require_login
     def get_data_dump_signed_urls(self, name, content_type, resource):
         """
