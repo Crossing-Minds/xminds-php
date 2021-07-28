@@ -100,15 +100,16 @@ $client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l
       ]);*/
 
 //$ret = $client->create_item_property("feature1", "uint32");
+//$ret = $client->create_item_property("feature2", "unicode", true);
 //$ret = $client->get_item_property("feature1");
 //$ret = $client->list_item_properties();
 //$ret = $client->delete_item_property("feature1");
 
 //$ret = $client->create_or_update_item(['item_id'=>4264735, 'feature1'=>68543]);
-//$ret = $client->get_item(4264735);
+//$ret = $client->get_item(784567);
 
 //$ret = $client->list_items([4264735]);
-$ret = $client->list_items_paginated(); // Not working?
+//$ret = $client->list_items_paginated(); // Not working?
 /*
 $ret = $client->create_or_update_items_bulk([
           [
@@ -120,6 +121,41 @@ $ret = $client->create_or_update_items_bulk([
               "feature1"=> 32,
           ]
       ]);*/
+
+/*$ret = $client->create_or_update_items_bulk([
+          [
+              "item_id"=> 784567,
+              "feature1"=> 25
+          ],
+          [
+              "item_id"=> 464737,
+              "feature1"=> 32
+          ]
+      ],[
+          [
+              "name"=> "feature2",
+              "array"=> [
+                  ["user_index"=> 0, "value_id"=> "channel1"],
+                  ["user_index"=> 0, "value_id"=> "channel2"],
+                  ["user_index"=> 1, "value_id"=> "channel1"]
+              ]
+          ]
+      ]);*/
+
+//$ret = $client->partial_update_item(['item_id'=> '784567', 'feature1'=> 353]);
+
+/*$ret = $client->partial_update_items_bulk([
+          [
+              "item_id"=> 784567,
+              "feature1"=> 27,
+          ],
+          [
+              "item_id"=> 464737,
+              "feature1"=> 34,
+          ]
+      ]);*/
+
+
 
 print_r ($ret);
 

@@ -957,30 +957,35 @@ class CrossingMindsApiClient
             $this->api->put($path, $data, $timeout=60);
         }
     }
-/*
-    @require_login
-    def partial_update_item(self, item, create_if_missing=null):
-        """
+
+    //@require_login
+    function partial_update_item($item, $create_if_missing=null)
+	{
+        /*
         Partially update some properties of an item.
 
         :param dict item: item ID and properties {'item_id': ID, *<property_name: property_value>}
         :param bool? create_if_missing: control whether an error should be returned or a new item
         should be created when the ``item_id`` does not already exist. (default: false)
-        """
-        item = dict(item)
-        item_id = $this->_itemid2url(item.pop('item_id'))
-        path = f'items/{item_id}/'
-        data = {
-            'item': item,
-        }
-        if create_if_missing is not null:
-            data['create_if_missing'] = create_if_missing
-        return $this->api.patch(path=path, data=data)
+        */
+        $item = (array)$item;
+		
+        $item_id = $this->_itemid2url($item['item_id']);
+		unset($item['item_id']);
+        $path = "items/{$item_id}/";
+        $data = [
+            'item'=> $item,
+        ];
+        if ($create_if_missing != null)
+            $data['create_if_missing'] = $create_if_missing;
+        return $this->api->patch($path, $data);
+	}
 
-    @require_login
-    def partial_update_items_bulk(self, items, items_m2m=null, create_if_missing=null,
-                                  chunk_size=(1 << 10)):
-        """
+    //@require_login
+    function partial_update_items_bulk($items, $items_m2m=null, $create_if_missing=null,
+                                  $chunk_size=(1 << 10))
+	{
+        /*
         Partially update some properties of many items.
 
         :param array items: array with fields ['id': ID, *<property_name: value_type>]
@@ -995,16 +1000,20 @@ class CrossingMindsApiClient
         :param bool? create_if_missing: control whether an error should be returned or a new item
         should be created when the ``item_id`` does not already exist. (default: false)
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
-        """
-        path = f'items-bulk/'
-        data = {}
-        if create_if_missing is not null:
-            data['create_if_missing'] = create_if_missing
-        for items_chunk, items_m2m_chunk in $this->_chunk_items(items, items_m2m, chunk_size):
-            data['items'] = items_chunk
-            data['items_m2m'] = items_m2m_chunk
-            $this->api.patch(path=path, data=data, timeout=60)
-*/
+        */
+        $path = 'items-bulk/';
+        $data = [];
+        if ($create_if_missing != null)
+            $data['create_if_missing'] = $create_if_missing;
+		$chunks = $this->_chunk_items($items, $items_m2m, $chunk_size);
+        foreach ($chunks as list($items_chunk, $items_m2m_chunk))
+		{
+            $data['items'] = $items_chunk;
+            $data['items_m2m'] = $items_m2m_chunk;
+            $this->api->patch($path, $data, $timeout=60);
+		}
+	}
+
     function _chunk_items($items, $items_m2m, $chunk_size)
 	{
         $items_m2m = $items_m2m ?? [];
