@@ -89,20 +89,11 @@ class _BaseCrossingMindsApiRequest
 
         if ($path and substr($path, -1) != "/")
             $url .= '/';
-/*
-        request_kwargs = {
-            'timeout': timeout or self.DEFAULT_TIMEOUT,
-            **self._REQUEST_KWARGS
-        }
-*/
+
         $headerMod = $this->headers;
         $headerString = "";
         foreach($headerMod as $k => $v)
             $headerString .= $k.": ".$v."\r\n";
-
-        print_r(['header',$headerMod]);
-        print_r(['data',$data]);
-        print_r(['params',$params]);
 
         $options = array(
                 'http' => array(
@@ -113,6 +104,8 @@ class _BaseCrossingMindsApiRequest
         );
         if(count($data))
             $options['http']['content'] = $this->_serialize_data($data);
+		if(isset($kwargs['timeout']))
+            $options['http']['timeout'] = $kwargs['timeout']; //seconds
         if(count($params))
             $url .= "?".http_build_query($params);
 
