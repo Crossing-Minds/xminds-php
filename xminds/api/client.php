@@ -99,7 +99,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path, $data);
     }
 
-    //@require_login
     function list_accounts()
     {
         /*
@@ -250,7 +249,6 @@ class CrossingMindsApiClientImpl
 
     # === Org metadata ===
 
-    //@require_login
     function get_organization()
     {
         /*
@@ -260,7 +258,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path);
     }
 
-    //@require_login
     function create_or_partial_update_organization($metadata, $preserve=null)
     {
         /*
@@ -275,7 +272,6 @@ class CrossingMindsApiClientImpl
         return $this->api->patch($path, $data);
     }
 
-    //@require_login
     function partial_update_organization_preview($metadata, $preserve=null)
     {
         /*
@@ -302,7 +298,6 @@ class CrossingMindsApiClientImpl
 
     # === Database ===
 
-    //@require_login
     function create_database($name, $description, $item_id_type='uint32', $user_id_type='uint32')
     {
         /*
@@ -323,7 +318,6 @@ class CrossingMindsApiClientImpl
         return $this->api->post($path, $data);
     }
 
-    //@require_login
     function get_all_databases($amt=null, $page=null)
     {
         /*
@@ -354,7 +348,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path, $params);
     }
 
-    //@require_login
     function get_database()
     {
         /*
@@ -378,7 +371,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path);
     }
 
-    //@require_login
     function partial_update_database($description=null, $metadata=null, $preserve=null)
     {
         /*
@@ -399,7 +391,6 @@ class CrossingMindsApiClientImpl
         return $this->api->patch($path, $data);
     }
 
-    //@require_login
     function partial_update_database_preview($description=null, $metadata=null, $preserve=null)
     {
         /*
@@ -430,7 +421,6 @@ class CrossingMindsApiClientImpl
         return $this->api->patch($path, $data);
     }
 
-    //@require_login
     function delete_database()
     {
         /*
@@ -440,7 +430,6 @@ class CrossingMindsApiClientImpl
         return $this->api->delete($path, [], ['timeout'=>29]);
     }
 
-    //@require_login
     function status()
     {
         /*
@@ -452,7 +441,6 @@ class CrossingMindsApiClientImpl
 
     # === User Property ===
 
-    //@require_login
     function get_user_property($property_name)
     {
         /*
@@ -469,7 +457,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path);
     }
 
-    //@require_login
     function list_user_properties()
     {
         /*
@@ -487,7 +474,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path);
     }
 
-    //@require_login
     function create_user_property($property_name, $value_type, $repeated=False)
     {
         /*
@@ -506,7 +492,6 @@ class CrossingMindsApiClientImpl
         return $this->api->post($path, $data);
     }
 
-    //@require_login
     function delete_user_property($property_name)
     {
         /*
@@ -520,7 +505,6 @@ class CrossingMindsApiClientImpl
 
     # === User ===
 
-    //@require_login
     function get_user($user_id)
     {
         /*
@@ -541,7 +525,6 @@ class CrossingMindsApiClientImpl
         return $resp;
     }
 
-    //@require_login
     function list_users_paginated($amt=null, $cursor=null)
     {
         /*
@@ -594,7 +577,6 @@ class CrossingMindsApiClientImpl
         return $this->api->put($path, $data);
     }
 
-    //@require_login
     function create_or_update_users_bulk($users, $chunk_size=(1<<10))
     {
         /*
@@ -616,7 +598,6 @@ class CrossingMindsApiClientImpl
         }
     }
 
-    //@require_login
     function partial_update_user($user, $create_if_missing=null)
     {
         /*
@@ -638,7 +619,6 @@ class CrossingMindsApiClientImpl
         return $this->api->patch($path, $data);
     }
 
-    //@require_login
     function partial_update_users_bulk($users, $create_if_missing=null,
                                   $chunk_size=(1 << 10))
     {
@@ -680,7 +660,6 @@ class CrossingMindsApiClientImpl
 
     # === Item Property ===
 
-    //@require_login
     function get_item_property($property_name)
     {
         /*
@@ -697,7 +676,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path);
     }
 
-    //@require_login
     function list_item_properties()
     {
         /*
@@ -715,7 +693,6 @@ class CrossingMindsApiClientImpl
         return $this->api->get($path);
     }
 
-    //@require_login
     function create_item_property($property_name, $value_type, $repeated=False)
     {
         /*
@@ -734,7 +711,6 @@ class CrossingMindsApiClientImpl
         return $this->api->post($path, $data);
     }
 
-    //@require_login
     function delete_item_property($property_name)
     {
         /*
@@ -748,7 +724,6 @@ class CrossingMindsApiClientImpl
 
     # === Item ===
 
-    //@require_login
     function get_item($item_id)
     {
         /*
@@ -769,7 +744,6 @@ class CrossingMindsApiClientImpl
         return $resp;
     }
 
-    //@require_login
     function list_items($items_id)
     {
         /*
@@ -799,7 +773,6 @@ class CrossingMindsApiClientImpl
         return $resp;
     }
 
-    //@require_login
     function list_items_paginated($amt=null, $cursor=null)
     {
         /*
@@ -834,7 +807,6 @@ class CrossingMindsApiClientImpl
         return $resp;
     }
 
-    //@require_login
     function create_or_update_item($item)
     {
         /*
@@ -852,7 +824,6 @@ class CrossingMindsApiClientImpl
         return $this->api->put($path, $data);
     }
 
-    //@require_login
     function create_or_update_items_bulk($items, $chunk_size=(1<<10))
     {
         /*
@@ -874,9 +845,8 @@ class CrossingMindsApiClientImpl
         }
     }
 
-    //@require_login
     function partial_update_item($item, $create_if_missing=null)
-	{
+    {
         /*
         Partially update some properties of an item.
 
@@ -885,9 +855,9 @@ class CrossingMindsApiClientImpl
         should be created when the ``item_id`` does not already exist. (default: false)
         */
         $item = (array)$item;
-		
+        
         $item_id = $this->_itemid2url($item['item_id']);
-		unset($item['item_id']);
+        unset($item['item_id']);
         $path = "items/{$item_id}/";
         $data = [
             'item'=> $item,
@@ -895,12 +865,11 @@ class CrossingMindsApiClientImpl
         if ($create_if_missing != null)
             $data['create_if_missing'] = $create_if_missing;
         return $this->api->patch($path, $data);
-	}
+    }
 
-    //@require_login
     function partial_update_items_bulk($items, $create_if_missing=null,
                                   $chunk_size=(1 << 10))
-	{
+    {
         /*
         Partially update some properties of many items.
 
@@ -914,36 +883,35 @@ class CrossingMindsApiClientImpl
         $data = [];
         if ($create_if_missing != null)
             $data['create_if_missing'] = $create_if_missing;
-		$chunks = $this->_chunk_items($items, $chunk_size);
+        $chunks = $this->_chunk_items($items, $chunk_size);
         foreach ($chunks as list($items_chunk, $items_m2m_chunk))
-		{
+        {
             $data['items'] = $items_chunk;
             $data['items_m2m'] = $items_m2m_chunk;
             $this->api->patch($path, $data, $timeout=60);
-		}
-	}
+        }
+    }
 
     function _chunk_items($items, $chunk_size)
-	{
+    {
         // cast dict to list of dict
         $n_chunks = (int)(ceil(count($items) / $chunk_size));
-		$out = [];
+        $out = [];
         for ($i=0; $i<$n_chunks; $i++)
-		{
+        {
             $start_idx = $i * $chunk_size;
             $end_idx = ($i + 1) * $chunk_size;
-			$items_chunk = array_slice($items, $start_idx, $chunk_size);
+            $items_chunk = array_slice($items, $start_idx, $chunk_size);
             $items_m2m_chunk = [];
             array_push($out, [$this->_itemid2body($items_chunk), $items_m2m_chunk]);
-		}
-		return $out;
-	}
+        }
+        return $out;
+    }
 
     # === Reco: Item-to-item ===
 
-    //@require_login
     function get_reco_item_to_items($item_id, $amt=null, $cursor=null, $filters=null)
-	{
+    {
         /*
         Get similar items.
 
@@ -968,14 +936,13 @@ class CrossingMindsApiClientImpl
         $resp = $this->api->get($path, $params);
         $resp['items_id'] = $this->_body2itemid($resp['items_id']);
         return $resp;
-	}
+    }
 
     # === Reco: Session-to-item ===
 
-    //@require_login
     function get_reco_session_to_items($ratings=null, $user_properties=null,
                                   $amt=null, $cursor=null, $filters=null, $exclude_rated_items=null)
-	{
+    {
         /*
         Get items recommendations given the ratings of an anonymous session.
 
@@ -1007,14 +974,13 @@ class CrossingMindsApiClientImpl
         $resp = $this->api->post($path, $data);
         $resp['items_id'] = $this->_body2itemid(resp['items_id']);
         return $resp;
-	}
+    }
 
     # === Reco: User-to-item ===
 
-    //@require_login
     function get_reco_user_to_items($user_id, $amt=null, $cursor=null, $filters=null,
                                $exclude_rated_items=null)
-	{
+    {
         /*
         Get items recommendations given a user ID.
 
@@ -1042,13 +1008,12 @@ class CrossingMindsApiClientImpl
         $resp = $this->api->get($path, $params);
         $resp['items_id'] = $this->_body2itemid($resp['items_id']);
         return $resp;
-	}
+    }
 
     # === User Ratings ===
 
-    //@require_login
     function create_or_update_rating($user_id, $item_id, $rating, $timestamp=null)
-	{
+    {
         /*
         Create or update a rating for a user and an item.
         If the rating exists for the tuple (user_id, item_id) then it is updated,
@@ -1068,11 +1033,10 @@ class CrossingMindsApiClientImpl
         if ($timestamp != null)
             $data['timestamp'] = $timestamp;
         return $this->api->put($path, $data);
-	}
+    }
 
-    //@require_login
     function create_or_update_user_ratings_bulk($user_id, $ratings)
-	{
+    {
         /*
         Create or update bulks of ratings for a single user and many items.
 
@@ -1086,11 +1050,10 @@ class CrossingMindsApiClientImpl
             'ratings'=> $this->_itemid2body($ratings),
         ];
         return $this->api->put($path, $data, ['timeout'=>10]);
-	}
+    }
 
-    //@require_login
     function create_or_update_ratings_bulk($ratings, $chunk_size=(1<<14))
-	{	
+    {    
         /*
         Create or update large bulks of ratings for many users and many items.
 
@@ -1101,20 +1064,19 @@ class CrossingMindsApiClientImpl
         $path = 'ratings-bulk/';
         $n_chunks = (int)(ceil(count($ratings) / $chunk_size));
         for ($i=0; $i<$n_chunks; $i++)
-		{
-			$ratings_chunk = array_slice($ratings, $i*$chunk_size, $chunk_size);
+        {
+            $ratings_chunk = array_slice($ratings, $i*$chunk_size, $chunk_size);
             $ratings_chunk = $this->_userid2body($this->_itemid2body($ratings_chunk));
             $data = [
                 'ratings'=> $ratings_chunk,
             ];
             $this->api->put($path, $data, ['timeout'=>60]);
-		}
+        }
         return;
-	}
+    }
 
-    //@require_login
     function list_user_ratings($user_id, $amt=null, $page=null)
-	{
+    {
         /*
         List the ratings of one user (paginated)
 
@@ -1138,11 +1100,10 @@ class CrossingMindsApiClientImpl
         $resp = $this->api->get($path, $params);
         $resp['user_ratings'] = $this->_body2itemid($resp['user_ratings']);
         return $resp;
-	}
+    }
 
-    //@require_login
     function list_ratings($amt=null, $cursor=null)
-	{
+    {
         /*
         List the ratings of one database
 
@@ -1164,11 +1125,10 @@ class CrossingMindsApiClientImpl
         $resp = $this->api->get($path, $params);
         $resp['ratings'] = $this->_body2userid($this->_body2itemid($resp['ratings']));
         return resp;
-	}
+    }
 
-    //@require_login
     function delete_rating($user_id, $item_id)
-	{
+    {
         /*
         Delete a single rating for a given user.
 
@@ -1179,11 +1139,10 @@ class CrossingMindsApiClientImpl
         $item_id = $this->_itemid2url($item_id);
         $path = "users/{$user_id}/ratings/{$item_id}";
         return $this->api->delete($path);
-	}
+    }
 
-    //@require_login
     function delete_user_ratings($user_id)
-	{
+    {
         /*
         Delete all ratings of a given user.
 
@@ -1192,13 +1151,12 @@ class CrossingMindsApiClientImpl
         $user_id = $this->_userid2url($user_id);
         $path = "users/{$user_id}/ratings/";
         return $this->api->delete($path);
-	}
+    }
 
     # === User Interactions ===
 
-    //@require_login
     function create_interaction($user_id, $item_id, $interaction_type, $timestamp=null)
-	{
+    {
         /*
         This endpoint allows you to create a new interaction for a user and an item.
         An inferred rating will be created or updated for the tuple (user_id, item_id).
@@ -1218,11 +1176,10 @@ class CrossingMindsApiClientImpl
         if ($timestamp != null)
             $data['timestamp'] = $timestamp;
         return $this->api->post($path, $data);
-	}
+    }
 
-    //@require_login
     function create_interactions_bulk($interactions, $chunk_size=(1<<14))
-	{
+    {
         /*
         Create or update large bulks of interactions for many users and many items.
         Inferred ratings will be created or updated for all tuples (user_id, item_id).
@@ -1234,22 +1191,21 @@ class CrossingMindsApiClientImpl
         $path = 'interactions-bulk/';
         $n_chunks = (int)(ceil(count($interactions) / $chunk_size));
         for ($i=0; $i<$n_chunks; $i++)
-		{
-			$interactions_chunk = array_slice($interactions, $i*$chunk_size, $chunk_size);
+        {
+            $interactions_chunk = array_slice($interactions, $i*$chunk_size, $chunk_size);
             $interactions_chunk = $this->_userid2body($this->_itemid2body($interactions_chunk));
             $data = [
                 'interactions'=> $interactions_chunk,
             ];
             $this->api->post($path, $data, ['timeout'=>10]);
-		}
+        }
         return;
-	}
+    }
 
     # === Data Dump Storage ===
 
-    //@require_login
     function get_data_dump_signed_urls($name, $content_type, $resource)
-	{
+    {
         /*
         Get signed url to upload a file. (url_upload and url_report)
 
@@ -1266,13 +1222,12 @@ class CrossingMindsApiClientImpl
                   'content_type'=> $content_type,
                   'resource'=> $resource];
         return $this->api->get($path, $params);
-	}
+    }
 
     # === Scheduled Background Tasks ===
 
-    //@require_login
     function trigger_background_task($task_name, $payload=null)
-	{
+    {
         /*
         Trigger background task such as retraining of ML models.
         You should not have to call this endpoint yourself, as this is done automatically.
@@ -1290,11 +1245,10 @@ class CrossingMindsApiClientImpl
         if ($payload)
             $data['payload'] = $payload;
         return $this->api->post($path, $data);
-	}
+    }
 
-    //@require_login
     function get_background_tasks($task_name)
-	{
+    {
         /*
         List currently running background tasks such as ML models training.
 
@@ -1309,7 +1263,7 @@ class CrossingMindsApiClientImpl
         */
         $path = "tasks/{$this->escape_url($task_name)}/recents/";
         return $this->api->get($path);
-	}
+    }
 
     # === Utils ===
 
@@ -1480,110 +1434,272 @@ class CrossingMindsApiClientImpl
 
 function RequireLogin($obj, $method, $args)
 {
-    try	{
+    try    {
         return call_user_func_array([$obj, $method], $args);
-	}
+    }
     catch (JwtTokenExpired $err) {
         if (!$this->_refresh_token or !$this->auto_refresh_token)
             throw $err;
         $this->login_refresh_token();
         return call_user_func_array([$obj, $method], $args);
-	}
+    }
 }
 
 class CrossingMindsApiClient extends CrossingMindsApiClientImpl
 {
+    function __construct($api_kwargs)
+    {
+        parent::__construct($api_kwargs);
+    }
+
     function create_individual_account($first_name, $last_name, $email, $password, $role='backend')
     {
         return RequireLogin($this, 'parent::create_individual_account', func_get_args());
-	}
+    }
 
-	function create_service_account($name, $password, $role='frontend')
-	{
+    function create_service_account($name, $password, $role='frontend')
+    {
         return RequireLogin($this, 'parent::create_service_account', func_get_args());
-	}
-/*
-	list_accounts(self):
-	def get_organization(self):
-	create_or_partial_update_organization
+    }
 
-	partial_update_organization_preview
-	create_database
-*/
-	function get_all_databases($amt=null, $page=null)
-	{
-		return RequireLogin($this, 'parent::get_all_databases', func_get_args());
-	}
+    function list_accounts()
+    {
+        return RequireLogin($this, 'parent::list_accounts', func_get_args());
+    }
 
-/*
-	get_database
-	partial_update_database
+    function get_organization()
+    {
+        return RequireLogin($this, 'parent::get_organization', func_get_args());
+    }
 
-	partial_update_database_preview(
-	delete_database(
-	status(self):
+    function create_or_partial_update_organization($metadata, $preserve=null)
+    {
+        return RequireLogin($this, 'parent::create_or_partial_update_organization', func_get_args());
+    }
 
+    function partial_update_organization_preview($metadata, $preserve=null)
+    {
+        return RequireLogin($this, 'parent::partial_update_organization_preview', func_get_args());
+    }
 
-	get_user_property
-	list_user_properties(
-	create_user_property(
-	delete_user_property
+    function create_database($name, $description, $item_id_type='uint32', $user_id_type='uint32')
+    {
+        return RequireLogin($this, 'parent::create_database', func_get_args());
+    }
 
+    function get_all_databases($amt=null, $page=null)
+    {
+        return RequireLogin($this, 'parent::get_all_databases', func_get_args());
+    }
 
-	get_user
-	list_users_paginated(
-	create_or_update_user(
-	create_or_update_users_bulk(
-	partial_update_user(
+    function get_database()
+    {
+        return RequireLogin($this, 'parent::get_database', func_get_args());
+    }
 
-	partial_update_users_bulk(
+    function partial_update_database($description=null, $metadata=null, $preserve=null)
+    {
+        return RequireLogin($this, 'parent::partial_update_database', func_get_args());
+    }
 
-	get_item_property(	
-	list_item_properties
+    function partial_update_database_preview($description=null, $metadata=null, $preserve=null)
+    {
+        return RequireLogin($this, 'parent::partial_update_database_preview', func_get_args());
+    }
 
-	create_item_property(
-	delete_item_property(
+    function delete_database()
+    {
+        return RequireLogin($this, 'parent::delete_database', func_get_args());
+    }
 
+    function status()
+    {
+        return RequireLogin($this, 'parent::status', func_get_args());
+    }
 
-	get_item(
-	list_items(
-	list_items_paginated(
-		create_or_update_item(
+    function get_user_property($property_name)
+    {
+        return RequireLogin($this, 'parent::get_user_property', func_get_args());
+    }
 
-	create_or_update_items_bulk(
-	partial_update_item(
+    function list_user_properties()
+    {
+        return RequireLogin($this, 'parent::list_user_properties', func_get_args());
+    }
 
+    function create_user_property($property_name, $value_type, $repeated=False)
+    {
+        return RequireLogin($this, 'parent::create_user_property', func_get_args());
+    }
 
+    function delete_user_property($property_name)
+    {
+        return RequireLogin($this, 'parent::delete_user_property', func_get_args());
+    }
 
+    function get_user($user_id)
+    {
+        return RequireLogin($this, 'parent::get_user', func_get_args());
+    }
 
-	partial_update_items_bulk(
- get_reco_item_to_items(
-	 get_reco_session_to_items(
-	get_reco_user_to_items(
-create_or_update_rating(
+    function list_users_paginated($amt=null, $cursor=null)
+    {
+        return RequireLogin($this, 'parent::list_users_paginated', func_get_args());
+    }
 
-	create_or_update_user_ratings_bulk(
-create_or_update_ratings_bulk
+    function create_or_update_user($user)
+    {
+        return RequireLogin($this, 'parent::create_or_update_user', func_get_args());
+    }
 
-list_user_ratings(
+    function create_or_update_users_bulk($users, $chunk_size=(1<<10))
+    {
+        return RequireLogin($this, 'parent::create_or_update_users_bulk', func_get_args());
+    }
 
-list_ratings(
+    function partial_update_user($user, $create_if_missing=null)
+    {
+        return RequireLogin($this, 'parent::partial_update_user', func_get_args());
+    }
 
- delete_rating(
+    function partial_update_users_bulk($users, $create_if_missing=null,
+                                  $chunk_size=(1 << 10))
+    {
+        return RequireLogin($this, 'parent::partial_update_users_bulk', func_get_args());
+    }
 
-delete_user_ratings(
+    function get_item_property($property_name)  
+    {
+        return RequireLogin($this, 'parent::get_item_property', func_get_args());
+    }
 
-create_interaction(
+    function list_item_properties()
+    {
+        return RequireLogin($this, 'parent::list_item_properties', func_get_args());
+    }
 
-create_interactions_bulk(
+    function create_item_property($property_name, $value_type, $repeated=False)
+    {
+        return RequireLogin($this, 'parent::create_item_property', func_get_args());
+    }
 
-get_data_dump_signed_urls
+    function delete_item_property($property_name)
+    {
+        return RequireLogin($this, 'parent::delete_item_property', func_get_args());
+    }
 
-trigger_background_task(
+    function get_item($item_id)
+    {
+        return RequireLogin($this, 'parent::get_item', func_get_args());
+    }
 
-get_background_tasks(
+    function list_items($items_id)
+    {
+        return RequireLogin($this, 'parent::list_items', func_get_args());
+    }
 
-*/
+    function list_items_paginated($amt=null, $cursor=null)
+    {
+        return RequireLogin($this, 'parent::list_items_paginated', func_get_args());
+    }
+
+    function create_or_update_item($item)
+    {
+        return RequireLogin($this, 'parent::create_or_update_item', func_get_args());
+    }
+
+    function create_or_update_items_bulk($items, $chunk_size=(1<<10))
+    {
+        return RequireLogin($this, 'parent::create_or_update_items_bulk', func_get_args());
+    }
+
+    function partial_update_item($item, $create_if_missing=null)
+    {
+        return RequireLogin($this, 'parent::partial_update_item', func_get_args());
+    }
+
+    function partial_update_items_bulk($items, $create_if_missing=null,
+                                  $chunk_size=(1 << 10))
+    {
+        return RequireLogin($this, 'parent::partial_update_items_bulk', func_get_args());
+    }
+
+    function get_reco_item_to_items($item_id, $amt=null, $cursor=null, $filters=null)
+    {
+        return RequireLogin($this, 'parent::get_reco_item_to_items', func_get_args());
+    }
+
+    function get_reco_session_to_items($ratings=null, $user_properties=null,
+                                  $amt=null, $cursor=null, $filters=null, $exclude_rated_items=null)
+    {
+        return RequireLogin($this, 'parent::get_reco_session_to_items', func_get_args());
+    }
+
+    function get_reco_user_to_items($user_id, $amt=null, $cursor=null, $filters=null,
+                               $exclude_rated_items=null)
+    {
+        return RequireLogin($this, 'parent::get_reco_user_to_items', func_get_args());
+    }
+
+    function create_or_update_rating($user_id, $item_id, $rating, $timestamp=null)
+    {
+        return RequireLogin($this, 'parent::create_or_update_rating', func_get_args());
+    }
+
+    function create_or_update_user_ratings_bulk($user_id, $ratings)
+    {
+        return RequireLogin($this, 'parent::create_or_update_user_ratings_bulk', func_get_args());
+    }
+
+    function create_or_update_ratings_bulk($ratings, $chunk_size=(1<<14))
+    {
+        return RequireLogin($this, 'parent::create_or_update_ratings_bulk', func_get_args());
+    }
+
+    function list_user_ratings($user_id, $amt=null, $page=null)
+    {
+        return RequireLogin($this, 'parent::list_user_ratings', func_get_args());
+    }
+
+    function list_ratings($amt=null, $cursor=null)
+    {
+        return RequireLogin($this, 'parent::list_ratings', func_get_args());
+    }
+
+    function delete_rating($user_id, $item_id)
+    {
+        return RequireLogin($this, 'parent::delete_rating', func_get_args());
+    }
+
+    function delete_user_ratings($user_id)
+    {
+        return RequireLogin($this, 'parent::delete_user_ratings', func_get_args());
+    }
+
+    function create_interaction($user_id, $item_id, $interaction_type, $timestamp=null)
+    {
+        return RequireLogin($this, 'parent::create_interaction', func_get_args());
+    }
+
+    function create_interactions_bulk($interactions, $chunk_size=(1<<14))
+    {
+        return RequireLogin($this, 'parent::create_interactions_bulk', func_get_args());
+    }
+
+    function get_data_dump_signed_urls($name, $content_type, $resource)
+    {
+        return RequireLogin($this, 'parent::get_data_dump_signed_urls', func_get_args());
+    }
+
+    function trigger_background_task($task_name, $payload=null)
+    {
+        return RequireLogin($this, 'parent::trigger_background_task', func_get_args());
+    }
+
+    function get_background_tasks($task_name)
+    {
+        return RequireLogin($this, 'parent::get_background_tasks', func_get_args());
+    }
 
 }
 
