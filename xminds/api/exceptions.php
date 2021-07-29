@@ -12,16 +12,10 @@ class XMindsError extends Exception
     // Base class for all Crossing Minds Exceptions
 	function __construct($data=null)
 	{
+		parent::__construct();
 		$this->retry_after = null;
         $this->message = null;
         $this->data = $data;
-        /*if self.message and data:
-            try:
-                self.message = self.message.format(**data)
-            except KeyError as e:
-                print(f'Missing key {e} in ``error_extra_data``')
-
-	*/
 	}
 
 	public function __toString()
@@ -39,88 +33,162 @@ class XMindsError extends Exception
 */
 class ServerError extends XMindsError
 {
-/*    MSG = 'Unknown error from server';
-    CODE = 0;
-    HTTP_STATUS = 500;*/
+    public $CODE = 0;
+    public $HTTP_STATUS = 500;
+
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+        $this->message = 'Unknown error from server';
+	}
 }
-/*
 
-class ServerUnavailable(XMindsError):
-    MSG = 'The server is currently unavailable, please try again later'
-    CODE = 1
-    HTTP_STATUS = 503
-    retry_after = 1
+class ServerUnavailable extends XMindsError
+{
+    public $CODE = 1;
+    public $HTTP_STATUS = 503;
 
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+		$this->message = 'The server is currently unavailable, please try again later';
+		$this->retry_after = 1;
+	}
+}
 
-class TooManyRequests(XMindsError):
-    MSG = 'The amount of requests exceeds the limit of your subscription'
-    CODE = 2
-    HTTP_STATUS = 429
-    retry_after = 1  # should be passed in __init__ instead
+class TooManyRequests extends XMindsError
+{
+    public $CODE = 2;
+    public $HTTP_STATUS = 429;
 
-    def __init__(self, retry_after=None):
-        if retry_after:
-            self.retry_after = retry_after
-        super().__init__()
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+	    $this->message = 'The amount of requests exceeds the limit of your subscription';
 
+	    $this->retry_after = 1;  # should be passed in constructor instead
+        if ($data['retry_after'])
+            $this->retry_after = $data['retry_after'];
+	}
+}
 
 # === Authentication Errors ====
 
 
-class AuthError(XMindsError):
-    HTTP_STATUS = 401
-    MSG = 'Cannot perform authentication: {error}'
-    CODE = 21
+class AuthError extends XMindsError
+{
+    public $HTTP_STATUS = 401;
+    public $CODE = 21;
 
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+    	$this->message = "Cannot perform authentication:{$data['error']}";
+	}
+}
 
-class JwtTokenExpired(AuthError):
-    MSG = 'The JWT token has expired'
-    CODE = 22
+class JwtTokenExpired extends XMindsError
+{
+    public $CODE = 22;
 
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+    	$this->message = 'The JWT token has expired';
 
-class RefreshTokenExpired(AuthError):
-    MSG = 'The refresh token has expired'
-    CODE = 28
+	}
+}
 
+class RefreshTokenExpired extends XMindsError
+{
+    public $CODE = 28;
+
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+   		$this->message = 'The refresh token has expired';
+
+	}
+}
 
 # === Request Errors ===
 
 
-class RequestError(XMindsError):
-    HTTP_STATUS = 400
+class RequestError extends XMindsError
+{
+    public $HTTP_STATUS = 400;
 
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+		$this->message = "Request error";
+	}
+}
 
-class WrongData(RequestError):
-    MSG = 'There is an error in the submitted data'
-    CODE = 40
+class WrongData extends XMindsError
+{
+    public $CODE = 40;
 
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+    	$this->message = 'There is an error in the submitted data';
 
-class DuplicatedError(RequestError):
-    MSG = 'The {type} {key} is duplicated'
-    CODE = 42
+	}
+}
 
+class DuplicatedError extends XMindsError
+{
+    public $CODE = 42;
 
-class ForbiddenError(XMindsError):
-    HTTP_STATUS = 403
-    MSG = 'Do not have enough permissions to access this resource: {error}'
-    CODE = 50
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+	    $this->message = "The {$data['type']} {$data['key']} is duplicated";
+	}
+}
 
+class ForbiddenError extends XMindsError
+{
+    public $HTTP_STATUS = 403;
+    public $CODE = 50;
 
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+	    $this->message = "Do not have enough permissions to access this resource: {$data['error']}";
+
+	}
+}
 
 # === Resource Errors ===
 
 
-class NotFoundError(XMindsError):
-    HTTP_STATUS = 404
-    MSG = 'The {type} {key} does not exist'
-    CODE = 60
+class NotFoundError extends XMindsError
+{
+    public $HTTP_STATUS = 404;
+    public $CODE = 60;
 
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+	    $this->message = "The {$data['type']} {$data['key']} does not exist";
 
-class MethodNotAllowed(XMindsError):
-    HTTP_STATUS = 405
-    MSG = 'Method "{method}" not allowed'
-    CODE = 70
+	}
+}
 
+class MethodNotAllowed extends XMindsError
+{
+    public $HTTP_STATUS = 405;
+    public $CODE = 70;
+
+	function __construct($data=null)
+	{
+	    $this->message = "Method \"{$data['method']}\" not allowed";
+
+	}
+}
+/*
 
 # === Utils to build exception from code ===
 
