@@ -611,24 +611,17 @@ class CrossingMindsApiClient
     }
 
     //@require_login
-    function create_or_update_users_bulk($users, $users_m2m=null, $chunk_size=(1<<10))
+    function create_or_update_users_bulk($users, $chunk_size=(1<<10))
     {
         /*
         Create many users in bulk, or update the ones for which the id already exist.
 
         :param array users: array with fields ['id': ID, *<property_name: value_type>]
             contains only the non-repeated values,
-        :param dict? users_m2m: dict of arrays for repeated values:
-            {
-                *<repeated_property_name: {
-                    'name': str,
-                    'array': array with fields ['user_index': uint32, 'value_id': value_type],
-                }>
-            }
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
         */
         $path = 'users-bulk/';
-        $chunked = $this->_chunk_users($users, $users_m2m, $chunk_size);
+        $chunked = $this->_chunk_users($users, $chunk_size);
         foreach ($chunked as list($users_chunk, $users_m2m_chunk))
         {
             $data = [
@@ -662,7 +655,7 @@ class CrossingMindsApiClient
     }
 
     //@require_login
-    function partial_update_users_bulk($users, $users_m2m=null, $create_if_missing=null,
+    function partial_update_users_bulk($users, $create_if_missing=null,
                                   $chunk_size=(1 << 10))
     {
         /*
@@ -670,13 +663,6 @@ class CrossingMindsApiClient
 
         :param array users: array with fields ['id': ID, *<property_name: value_type>]
             contains only the non-repeated values,
-        :param dict? users_m2m: dict of arrays for repeated values:
-            {
-                *<repeated_property_name: {
-                    'name': str,
-                    'array': array with fields ['user_index': uint32, 'value_id': value_type],
-                }>
-            }
         :param bool? create_if_missing: to control whether an error should be returned or new users
         should be created when the ``user_id`` does not already exist. (default: False)
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
@@ -685,7 +671,7 @@ class CrossingMindsApiClient
         $data = [];
         if ($create_if_missing != null)
             $data['create_if_missing'] = $create_if_missing;
-        $chunked = $this->_chunk_users($users, $users_m2m, $chunk_size);
+        $chunked = $this->_chunk_users($users, $chunk_size);
         foreach ($chunked as list($users_chunk, $users_m2m_chunk))
         {
             $data['users'] = $users_chunk;
@@ -694,19 +680,8 @@ class CrossingMindsApiClient
         }
     }
 
-    function _chunk_users($users, $users_m2m, $chunk_size)
+    function _chunk_users($users, $chunk_size)
     {
-        $users_m2m = $users_m2m ?? [];
-        # cast dict to list of dict
-        if (is_array($users_m2m))
-        {
-            $users_m2m_b = [];
-            foreach ($users_m2m as $m2m) //list($name, $array)
-            {
-                array_push($users_m2m_b, ['name'=> $m2m['name'], 'array'=> $m2m['array']]);
-            }
-            $users_m2m = $users_m2m_b;
-        }
         $n_chunks = (int)(ceil(count($users) / $chunk_size));
         $out = [];
         for ($i = 0; $i < $n_chunks; $i++)
@@ -714,20 +689,7 @@ class CrossingMindsApiClient
             $start_idx = $i * $chunk_size;
             $end_idx = ($i + 1) * $chunk_size;
             $users_chunk = array_slice($users, $start_idx, $chunk_size);
-            # split M2M array-optimized if any
-            $users_m2m_chunk = [];
-            foreach ($users_m2m as $m2m)
-            {
-                $array = $m2m['array'];
-                $array_chunk = [];
-                foreach($array as $row)
-                {
-                    if ($start_idx <= $row['user_index'] and $row['user_index'] < $end_idx)
-                        array_push($array_chunk, ['user_index'=> $row['user_index'] - $start_idx, 'value_id'=> $row['value_id']]);
-                }
-                array_push($users_m2m_chunk, ['name'=> $m2m['name'], 'array'=> $array_chunk]);
-            }
-            array_push($out, [$this->_userid2body($users_chunk), $users_m2m_chunk]);
+            array_push($out, [$this->_userid2body($users_chunk), []]);
         }
         return $out;
     }
@@ -907,24 +869,17 @@ class CrossingMindsApiClient
     }
 
     //@require_login
-    function create_or_update_items_bulk($items, $items_m2m=null, $chunk_size=(1<<10))
+    function create_or_update_items_bulk($items, $chunk_size=(1<<10))
     {
         /*
         Create many items in bulk, or update the ones for which the id already exist.
 
         :param array items: array with fields ['id': ID, *<property_name: value_type>]
             contains only the non-repeated values,
-        :param array? items_m2m: dict of arrays for repeated values:
-            {
-                *<repeated_property_name: {
-                    'name': str,
-                    'array': array with fields ['item_index': uint32, 'value_id': value_type],
-                }>
-            }
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
         */
         $path = 'items-bulk/';
-        $chunks = $this->_chunk_items($items, $items_m2m, $chunk_size);
+        $chunks = $this->_chunk_items($items, $chunk_size);
         foreach ($chunks as list($items_chunk, $items_m2m_chunk))
         {
             $data = [
@@ -959,7 +914,7 @@ class CrossingMindsApiClient
 	}
 
     //@require_login
-    function partial_update_items_bulk($items, $items_m2m=null, $create_if_missing=null,
+    function partial_update_items_bulk($items, $create_if_missing=null,
                                   $chunk_size=(1 << 10))
 	{
         /*
@@ -967,13 +922,6 @@ class CrossingMindsApiClient
 
         :param array items: array with fields ['id': ID, *<property_name: value_type>]
             contains only the non-repeated values,
-        :param array? items_m2m: dict of arrays for repeated values:
-            {
-                *<repeated_property_name: {
-                    'name': str,
-                    'array': array with fields ['item_index': uint32, 'value_id': value_type],
-                }>
-            }
         :param bool? create_if_missing: control whether an error should be returned or a new item
         should be created when the ``item_id`` does not already exist. (default: false)
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
@@ -982,7 +930,7 @@ class CrossingMindsApiClient
         $data = [];
         if ($create_if_missing != null)
             $data['create_if_missing'] = $create_if_missing;
-		$chunks = $this->_chunk_items($items, $items_m2m, $chunk_size);
+		$chunks = $this->_chunk_items($items, $chunk_size);
         foreach ($chunks as list($items_chunk, $items_m2m_chunk))
 		{
             $data['items'] = $items_chunk;
@@ -991,16 +939,9 @@ class CrossingMindsApiClient
 		}
 	}
 
-    function _chunk_items($items, $items_m2m, $chunk_size)
+    function _chunk_items($items, $chunk_size)
 	{
-        $items_m2m = $items_m2m ?? [];
         // cast dict to list of dict
-        if (is_array($items_m2m))
-		{
-            $items_m2m = [];
-			foreach ($items_m2m as $name=> $array)
-				array_push($items_m2m, ['name'=> $name, 'array'=> $array]);
-		}
         $n_chunks = (int)(ceil(count($items) / $chunk_size));
 		$out = [];
         for ($i=0; $i<$n_chunks; $i++)
@@ -1008,26 +949,7 @@ class CrossingMindsApiClient
             $start_idx = $i * $chunk_size;
             $end_idx = ($i + 1) * $chunk_size;
 			$items_chunk = array_slice($items, $start_idx, $chunk_size);
-            # split M2M array-optimized if any
             $items_m2m_chunk = [];
-            foreach ($items_m2m as $m2m)
-			{
-                $array = $m2m['array'];
-                /*if isinstance(array, numpy.ndarray):
-                    mask = (array['item_index'] >= start_idx) & (array['item_index'] < end_idx)
-                    array_chunk = array[mask]  # does copy
-                    array_chunk['item_index'] -= start_idx
-                else:
-                    logging.warning('array-optimized many-to-many format is not efficient '
-                                    'with JSON. Use numpy arrays and pkl serializer instead')*/
-		        $array_chunk = [];
-				foreach ($array as $row)
-				{
-					if ($start_idx <= $row['item_index'] and $row['item_index'] < $end_idx)
-		            	array_push($array_chunk, ['item_index'=> $row['item_index'] - $start_idx, 'value_id'=> $row['value_id']]);
-				}
-                array_push($items_m2m_chunk, ['name'=> $m2m['name'], 'array'=> $array_chunk]);
-			}
             array_push($out, [$this->_itemid2body($items_chunk), $items_m2m_chunk]);
 		}
 		return $out;

@@ -10,24 +10,27 @@ All exceptions inherit from ``XMindsError``.
 class XMindsError extends Exception
 {
     // Base class for all Crossing Minds Exceptions
-/*    retry_after = None
-
-    def __init__(self, data=None):
-        self.message = self.MSG
-        self.data = data
-        if self.message and data:
+	function __construct($data=null)
+	{
+		$this->retry_after = null;
+        $this->message = null;
+        $this->data = $data;
+        /*if self.message and data:
             try:
                 self.message = self.message.format(**data)
             except KeyError as e:
                 print(f'Missing key {e} in ``error_extra_data``')
 
-    def __str__(self):
-        msg = self.message
-        if self.data:
-            msg = msg + ' ' + str(self.data)
-        return msg
-*/
+	*/
+	}
 
+	public function __toString()
+	{
+        $msg = $this->message;
+        if ($this->data)
+            $msg .= ' ' . (string)($this->data);
+        return $msg;
+	}
 }
 /*
 

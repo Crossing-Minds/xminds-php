@@ -39,36 +39,17 @@ $client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l
 //$ret = $client->partial_update_user(['user_id'=> '35257', 'foo'=> 643567]);
 /*$ret = $client->create_or_update_users_bulk([
           [
-              "user_id"=> "123e4567-e89b-12d3-a456-426614174000",
+              "user_id"=> 386345,
               "age"=> 25,
               "subscriptions"=> ["channel1", "channel2"]
           ],
           [
-              "user_id"=> "c3391d83-553b-40e7-818e-fcf658ec397d",
+              "user_id"=> 5763432,
               "age"=> 32,
               "subscriptions"=> ["channel1"]
           ]
       ]);*/
 
-/*$ret = $client->create_or_update_users_bulk([
-          [
-              "user_id"=> 784567,
-              "age"=> 25
-          ],
-          [
-              "user_id"=> 464737,
-              "age"=> 32
-          ]
-      ],[
-          [
-              "name"=> "subscriptions",
-              "array"=> [
-                  ["user_index"=> 0, "value_id"=> "channel1"],
-                  ["user_index"=> 0, "value_id"=> "channel2"],
-                  ["user_index"=> 1, "value_id"=> "channel1"]
-              ]
-          ]
-      ]);*/
 
 /*$ret = $client->partial_update_users_bulk([
           [
@@ -81,23 +62,6 @@ $client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l
           ]
       ]);*/
 
-/*$ret = $client->partial_update_users_bulk([
-          [
-              "user_id"=> 784567,
-          ],
-          [
-              "user_id"=> 464737,
-          ]
-      ],[
-          [
-              "name"=> "subscriptions",
-              "array"=> [
-                  ["user_index"=> 0, "value_id"=> "channel3"],
-                  ["user_index"=> 0, "value_id"=> "channel5"],
-                  ["user_index"=> 1, "value_id"=> "channel4"]
-              ]
-          ]
-      ]);*/
 
 //$ret = $client->create_item_property("feature1", "uint32");
 //$ret = $client->create_item_property("feature2", "unicode", true);
@@ -110,8 +74,8 @@ $client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l
 
 //$ret = $client->list_items([4264735]);
 //$ret = $client->list_items_paginated(); // Not working?
-/*
-$ret = $client->create_or_update_items_bulk([
+
+/*$ret = $client->create_or_update_items_bulk([
           [
               "item_id"=> 4242576,
               "feature1"=> 25,
@@ -122,25 +86,6 @@ $ret = $client->create_or_update_items_bulk([
           ]
       ]);*/
 
-/*$ret = $client->create_or_update_items_bulk([
-          [
-              "item_id"=> 784567,
-              "feature1"=> 25
-          ],
-          [
-              "item_id"=> 464737,
-              "feature1"=> 32
-          ]
-      ],[
-          [
-              "name"=> "feature2",
-              "array"=> [
-                  ["user_index"=> 0, "value_id"=> "channel1"],
-                  ["user_index"=> 0, "value_id"=> "channel2"],
-                  ["user_index"=> 1, "value_id"=> "channel1"]
-              ]
-          ]
-      ]);*/
 
 //$ret = $client->partial_update_item(['item_id'=> '784567', 'feature1'=> 353]);
 
