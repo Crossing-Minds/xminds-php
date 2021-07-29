@@ -9,6 +9,8 @@ All exceptions inherit from ``XMindsError``.
 
 class XMindsError extends Exception
 {
+	public $CODE = null;
+
     // Base class for all Crossing Minds Exceptions
 	function __construct($data=null)
 	{
@@ -26,11 +28,9 @@ class XMindsError extends Exception
         return $msg;
 	}
 }
-/*
 
-# === Server Errors ===
+// === Server Errors ===
 
-*/
 class ServerError extends XMindsError
 {
     public $CODE = 0;
@@ -67,20 +67,19 @@ class TooManyRequests extends XMindsError
 	    $this->message = 'The amount of requests exceeds the limit of your subscription';
 
 	    $this->retry_after = 1;  # should be passed in constructor instead
-        if ($data['retry_after'])
+        if (isset($data['retry_after']))
             $this->retry_after = $data['retry_after'];
 	}
 }
 
-# === Authentication Errors ====
-
+// === Authentication Errors ====
 
 class AuthError extends XMindsError
 {
     public $HTTP_STATUS = 401;
     public $CODE = 21;
 
-	function __construct($data=null)
+	function __construct($data=['error'=>null])
 	{
 		parent::__construct($data);
     	$this->message = "Cannot perform authentication:{$data['error']}";
@@ -111,7 +110,7 @@ class RefreshTokenExpired extends XMindsError
 	}
 }
 
-# === Request Errors ===
+// === Request Errors ===
 
 
 class RequestError extends XMindsError
@@ -141,7 +140,7 @@ class DuplicatedError extends XMindsError
 {
     public $CODE = 42;
 
-	function __construct($data=null)
+	function __construct($data=['type'=>null, 'key'=>null])
 	{
 		parent::__construct($data);
 	    $this->message = "The {$data['type']} {$data['key']} is duplicated";
@@ -153,7 +152,7 @@ class ForbiddenError extends XMindsError
     public $HTTP_STATUS = 403;
     public $CODE = 50;
 
-	function __construct($data=null)
+	function __construct($data=['error'=>null])
 	{
 		parent::__construct($data);
 	    $this->message = "Do not have enough permissions to access this resource: {$data['error']}";
@@ -161,7 +160,7 @@ class ForbiddenError extends XMindsError
 	}
 }
 
-# === Resource Errors ===
+// === Resource Errors ===
 
 
 class NotFoundError extends XMindsError
@@ -169,7 +168,7 @@ class NotFoundError extends XMindsError
     public $HTTP_STATUS = 404;
     public $CODE = 60;
 
-	function __construct($data=null)
+	function __construct($data=['type'=>null, 'key'=>null])
 	{
 		parent::__construct($data);
 	    $this->message = "The {$data['type']} {$data['key']} does not exist";
@@ -182,40 +181,69 @@ class MethodNotAllowed extends XMindsError
     public $HTTP_STATUS = 405;
     public $CODE = 70;
 
-	function __construct($data=null)
+	function __construct($data=['method'=>null])
 	{
+		parent::__construct($data);
 	    $this->message = "Method \"{$data['method']}\" not allowed";
 
 	}
 }
-/*
 
-# === Utils to build exception from code ===
+class NotImplementedError extends XMindsError
+{
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+	    $this->message = "Not implemented error";
+	}
+}
 
+class XMindsTypeError extends XMindsError
+{
+	function __construct($data=null)
+	{
+		parent::__construct($data);
+	    $this->message = "Type error";
+	}
+}
 
-def _get_all_subclasses(cls):
-    return set(cls.__subclasses__()).union(
-        {s for c in cls.__subclasses__() for s in _get_all_subclasses(c)})
+// === Utils to build exception from code ===
 
+function getSubclassesOf($parent) {
+	// https://stackoverflow.com/a/3470032/4288232
+    $result = array();
+    foreach (get_declared_classes() as $class) {
+        if (is_subclass_of($class, $parent))
+            $result[] = $class;
+    }
+    return $result;
+}
 
-_ERROR_CLASSES = _get_all_subclasses(XMindsError)
+$_ERROR_CLASSES = [];
+foreach (getSubclassesOf('XMindsError') as $EC)
+{
+	array_push($_ERROR_CLASSES, new $EC());
+}
 
+function XMinds_Error_from_code($code, $data=[])
+{
+	global $_ERROR_CLASSES;
+	$c = null;
+	foreach ($_ERROR_CLASSES as $EC)
+	{	
+		//print($EC." ".$EC->CODE."\n");
+		if($EC->CODE == $code)
+		{
+			$c = get_class($EC);
+			break;
+		}
+	}
+	if($c == null)
+	{
+        print("unknown error code {$code}\n");
+        $c = 'ServerError';
+	}
+    return new $c($data);
+}
 
-@classmethod
-def from_code(cls, code, data=None):
-    if data is None:
-        data = {}
-    try:
-        c = next(c for c in _ERROR_CLASSES if getattr(c, 'CODE', -1) == code)
-    except StopIteration:
-        print(f'unknown error code {code}')
-        c = ServerError
-    exc = c.__new__(c)
-    XMindsError.__init__(exc, data)
-    return exc
-
-
-XMindsError.from_code = from_code
-
-*/
 ?>

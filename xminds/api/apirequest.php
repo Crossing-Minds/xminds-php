@@ -119,11 +119,13 @@ class _BaseCrossingMindsApiRequest
         {
             $data = $this->_parse_response($resp, True);
             print_r([$status_code, $resp]);
-            //try:
-            //    exc = XMindsError.from_code(data.get('error_code', 0), data.get('error_data'))
-            //except (KeyError, AttributeError, TypeError, ValueError):
-            //    exc = ServerError({'response': data})
-            throw new Exception();
+            try {
+            	$exc = XMinds_Error_from_code($data['error_code'], $data);
+			}
+            catch (Exception $err) {
+                $exc = new ServerError(['response'=> $data]);
+			}
+            throw $exc;
         }
 
         $data = $this->_parse_response($resp);

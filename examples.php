@@ -3,8 +3,8 @@
 require_once ("xminds/api/client.php");
 
 $client = new CrossingMindsApiClient(['host'=>"https://staging-api.crossingminds.com/", 'serializer'=>"json"]);
-$client->login_root("root-php-client@test-php.com", "In2p23NKJiPTpQPR");
-//$client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
+//$client->login_root("root-php-client@test-php.com", "In2p23NKJiPTpQPR");
+$client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
 //$client->login_service("Tim Service Account", "fW68l5NZYj622K4jTstB", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
 
 //print ($client->jwt_token());
@@ -100,6 +100,17 @@ print_r ($d);
           ]
       ]);*/
 
+$ret = $client->partial_update_items_bulk([
+          [
+              "item_id"=> "c784567",
+              "feature1"=> 27,
+          ],
+          [
+              "item_id"=> "c464737",
+              "feature1"=> 34,
+          ]
+      ]);
+
 //$ret = $client->get_reco_item_to_items(784567); //Not tested
 //$ret = $client->get_reco_session_to_items(); //Not tested
 //$ret = $client->get_reco_user_to_items(784567); //Not tested
@@ -116,7 +127,7 @@ print_r ($d);
 
 
 
-//print_r ($ret);
+print_r ($ret);
 
 
 
