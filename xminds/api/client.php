@@ -11,21 +11,6 @@ require_once ("apirequest.php");
 require_once ("exceptions.php");
 
 /*
-import base64
-from functools import wraps
-import logging
-import sys
-import time
-from urllib.parse import quote
-from binascii import Error as BinasciiError
-
-import numpy
-
-from ..compat import tqdm
-from .apirequest import CrossingMindsApiJsonRequest, CrossingMindsApiPythonRequest
-from .exceptions import DuplicatedError, JwtTokenExpired, ServerError
-
-
 def require_login(method):
     @wraps(method)
     def wrapped(self, *args, **kwargs):
@@ -734,14 +719,6 @@ class CrossingMindsApiClient
             foreach ($users_m2m as $m2m)
             {
                 $array = $m2m['array'];
-                //if isinstance(array, numpy.ndarray):
-                //    mask = (array['user_index'] >= start_idx) & (array['user_index'] < end_idx)
-                //    array_chunk = array[mask]  # does copy
-                //    array_chunk['user_index'] -= start_idx
-                //else:
-
-                //print('array-optimized many-to-many format is not efficient '
-                //                .'with JSON. Use numpy arrays and pkl serializer instead');
                 $array_chunk = [];
                 foreach($array as $row)
                 {
@@ -1428,113 +1405,6 @@ class CrossingMindsApiClient
         return $this->api->get($path);
 	}
 
-    function wait_until_ready($timeout=600, $sleep=1)
-	{
-        /*
-        Wait until the current database status is ready, meaning at least one model has been trained
-
-        :param int? timeout: maximum time to wait, raise RuntimeError if exceeded (default: 10min)
-        :param int? sleep: time to wait between polling (default: 1s)
-        */
-        assert($sleep > 0.1);
-        $resp = null;
-        /*time_start = time.time()
-        while time.time() - time_start < timeout:
-            time.sleep(sleep)
-            resp = $this->status()
-            if resp['status'] == 'ready':
-                return
-        raise RuntimeError(f'API not ready before {timeout}s. Last response: {resp}')*/
-	}
-/*
-    @require_login
-    def trigger_and_wait_background_task(self, task_name, timeout=600, lock_wait_timeout=null,
-                                         sleep=1, verbose=null):
-        """
-        Trigger background task such as retraining of ML models.
-        You don't necessarily have to call this endpoint yourself,
-        model training is also triggered automatically.
-        By default this waits for an already running task before triggering the new one
-
-        :param str task_name: for instance ``'ml_model_retrain'``
-        :param int? timeout: maximum time to wait after the new task is triggered (default: 10min)
-        :param int? lock_wait_timeout: if another task is already running, maximum time to wait
-            for it to finish before triggering the new task (default: ``timeout``)
-        :param int? sleep: time to wait between polling (default: 1s)
-        :returns: {
-            'task_id': str,
-        }
-        :raises: RuntimeError if either ``timeout`` or ``lock_wait_timeout`` is reached
-        """
-        assert sleep > 0.1
-        if lock_wait_timeout is null:
-            lock_wait_timeout = timeout
-        if verbose is null:
-            verbose = sys.stdout.isatty()
-        # wait for already running task (if any)
-        if lock_wait_timeout > 0:
-            msg = 'waiting for already running...' if verbose else null
-            $this->wait_for_background_task(
-                task_name, lock_wait_timeout, sleep, msg=msg, wait_if_no_task=False,
-                filtr=lambda t: t['status'] == 'RUNNING')
-        # trigger
-        try:
-            task_id = $this->trigger_background_task(task_name)['task_id']
-        except DuplicatedError as exc:
-            if getattr(exc, 'data', {})['name'] != 'TASK_ALREADY_RUNNING':
-                raise
-            # edge case: something else triggered the same task at the same time
-            tasks = $this->get_background_tasks(task_name)['tasks']
-            task_id = next(t['task_id'] for t in tasks if t['status'] != 'COMPLETED')
-        # wait for new task
-        msg = 'waiting...' if verbose else null
-        $this->wait_for_background_task(
-            task_name, timeout, sleep, msg=msg, filtr=lambda t: t['task_id'] == task_id)
-
-    def wait_for_background_task(self, task_name, timeout=600, sleep=1, msg=null, filtr=null,
-                                 wait_if_no_task=True):
-        """
-        Wait for a certain background task. Optionally specified with ``filtr`` function
-
-        :param str task_name: for instance ``'ml_model_retrain'``
-        :param int? timeout: maximum time to wait after the new task is triggered (default: 10min)
-        :param int? sleep: time to wait between polling (default: 1s)
-        :param str? msg: either ``null`` to disable print, or message prefix (default: null)
-        :param func? filtr: filter function(task: bool)
-        :param bool? wait_if_no_task: wait (instead of return) if there is no task satisfying filter
-        :returns: True is a task satisfying filters successfully ran, False otherwise
-        :raises: RuntimeError if ``timeout`` is reached or if the task failed
-        """
-        spinner = '|/-\\'
-        task = null
-        time_start = time.time()
-        time_waited = 0
-        i = 0
-        while time_waited < timeout:
-            time.sleep(sleep)
-            time_waited = time.time() - time_start
-            print_time = f'{int(time_waited) // 60:d}m{int(time_waited) % 60:02d}s'
-            tasks = $this->get_background_tasks(task_name)['tasks']
-            try:
-                task = max(filter(filtr, tasks), key=lambda t: t['start_time'])
-            except ValueError:
-                if wait_if_no_task:
-                    continue
-                else:
-                    return (task is not null)
-            progress = task.get('progress', '')
-            if task['status'] == 'COMPLETED':
-                if msg is not null:
-                    print(f'\r{msg} {print_time} done   {progress:80s}')
-                return True
-            elif task['status'] == 'FAILED':
-                raise RuntimeError(f'task {task_name} failed with: {progress}')
-            if msg is not null:
-                print(f'\r{msg} {print_time} {spinner[i%len(spinner)]} {progress:80s}', end='')
-                sys.stdout.flush()
-            i += 1
-        raise RuntimeError(f'task {task_name} not done before {timeout}s. Last response: {task}')
-*/
     # === Utils ===
 
     function _str_starts_with( $haystack, $needle ) 
@@ -1697,21 +1567,6 @@ class CrossingMindsApiClient
     {
         return urlencode($param);
     }
-
-/*
-    def _get_latest_task_progress_message(self, task_name,
-                                          default=null, default_running=null, default_failed=null):
-        tasks = $this->get_background_tasks(task_name)['tasks']
-        if not tasks:
-            return default
-        latest_task = max(tasks, key=lambda t: t['start_time'])
-        if latest_task['status'] == 'RUNNING':
-            return latest_task.get('progress', default_running)
-        if latest_task['status'] == 'FAILED':
-            raise ServerError({'error': latest_task.get('error', default_failed)})
-        return latest_task['status']
-
-*/
 
 }
 

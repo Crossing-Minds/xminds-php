@@ -11,15 +11,6 @@ This module implements the low level request logic of Crossing Minds API:
 
 require_once ("exceptions.php");
 /*
-import json
-import logging
-import pickle
-import zlib
-
-import requests
-
-from .. import __version__
-from ..compat import PYV
 from .exceptions import ServerError, XMindsError
 */
 
@@ -110,7 +101,6 @@ class _BaseCrossingMindsApiRequest
             $url .= "?".http_build_query($params);
 
         $context  = stream_context_create($options);
-        //print ($url."\n");
         $resp = file_get_contents($url, false, $context);
 
         $status_line = $http_response_header[0];
@@ -150,17 +140,6 @@ class _BaseCrossingMindsApiRequest
     {
         throw new NotImplementedError();
     }
-/*
-    @staticmethod
-    def _parse_token(headers):
-        if 'Authorization' not in headers:
-            return null
-
-        authorization_header = headers['Authorization']
-        token_start_index = authorization_header.index('Bearer') + len('Bearer ')
-        jwt = authorization_header[token_start_index:]
-        return jwt
-*/
 }
 
 class CrossingMindsApiJsonRequest extends _BaseCrossingMindsApiRequest
