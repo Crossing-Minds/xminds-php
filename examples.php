@@ -3,15 +3,15 @@
 require_once ("xminds/api/client.php");
 
 $client = new CrossingMindsApiClient(['host'=>"https://staging-api.crossingminds.com/", 'serializer'=>"json"]);
-//$client->login_root("root-php-client@test-php.com", "In2p23NKJiPTpQPR");
-$client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
+$client->login_root("root-php-client@test-php.com", "In2p23NKJiPTpQPR");
+//$client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
 //$client->login_service("Tim Service Account", "fW68l5NZYj622K4jTstB", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
 
 //print ($client->jwt_token());
 
-//$d = $client->get_all_databases();
+$d = $client->get_all_databases();
 
-//print_r ($d);
+print_r ($d);
 
 //$ret = $client->login_refresh_token();
 //$ret = $client->create_individual_account("Tim", "Sheerman-Chase", "tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l");

@@ -10,21 +10,7 @@ The client handles the logic to automatically get a new JWT token using the refr
 require_once ("apirequest.php");
 require_once ("exceptions.php");
 
-/*
-def require_login(method):
-    @wraps(method)
-    def wrapped(self, *args, **kwargs):
-        try:
-            return method(self, *args, **kwargs)
-        except JwtTokenExpired:
-            if not $this->_refresh_token or not $this->auto_refresh_token:
-                raise
-            $this->login_refresh_token()
-            return method(self, *args, **kwargs)
-    return wrapped
-*/
-
-class CrossingMindsApiClient
+class CrossingMindsApiClientImpl
 {
     function __construct($api_kwargs)
     {
@@ -45,7 +31,6 @@ class CrossingMindsApiClient
 
     # === Account ===
 
-    //@require_login
     function create_individual_account($first_name, $last_name, $email, $password, $role='backend')
     {
         /*
@@ -68,7 +53,6 @@ class CrossingMindsApiClient
         return $this->api->post($path, $data);
     }
 
-    //@require_login
     function create_service_account($name, $password, $role='frontend')
     {
         /*
@@ -1489,6 +1473,117 @@ class CrossingMindsApiClient
     {
         return urlencode($param);
     }
+
+}
+
+// ************************************************************
+
+function RequireLogin($obj, $method, $args)
+{
+    try	{
+        return call_user_func_array([$obj, $method], $args);
+	}
+    catch (JwtTokenExpired $err) {
+        if (!$this->_refresh_token or !$this->auto_refresh_token)
+            throw $err;
+        $this->login_refresh_token();
+        return call_user_func_array([$obj, $method], $args);
+	}
+}
+
+class CrossingMindsApiClient extends CrossingMindsApiClientImpl
+{
+    function create_individual_account($first_name, $last_name, $email, $password, $role='backend')
+    {
+        return RequireLogin($this, 'parent::create_individual_account', func_get_args());
+	}
+
+	function create_service_account($name, $password, $role='frontend')
+	{
+        return RequireLogin($this, 'parent::create_service_account', func_get_args());
+	}
+/*
+	list_accounts(self):
+	def get_organization(self):
+	create_or_partial_update_organization
+
+	partial_update_organization_preview
+	create_database
+*/
+	function get_all_databases($amt=null, $page=null)
+	{
+		return RequireLogin($this, 'parent::get_all_databases', func_get_args());
+	}
+
+/*
+	get_database
+	partial_update_database
+
+	partial_update_database_preview(
+	delete_database(
+	status(self):
+
+
+	get_user_property
+	list_user_properties(
+	create_user_property(
+	delete_user_property
+
+
+	get_user
+	list_users_paginated(
+	create_or_update_user(
+	create_or_update_users_bulk(
+	partial_update_user(
+
+	partial_update_users_bulk(
+
+	get_item_property(	
+	list_item_properties
+
+	create_item_property(
+	delete_item_property(
+
+
+	get_item(
+	list_items(
+	list_items_paginated(
+		create_or_update_item(
+
+	create_or_update_items_bulk(
+	partial_update_item(
+
+
+
+
+	partial_update_items_bulk(
+ get_reco_item_to_items(
+	 get_reco_session_to_items(
+	get_reco_user_to_items(
+create_or_update_rating(
+
+	create_or_update_user_ratings_bulk(
+create_or_update_ratings_bulk
+
+list_user_ratings(
+
+list_ratings(
+
+ delete_rating(
+
+delete_user_ratings(
+
+create_interaction(
+
+create_interactions_bulk(
+
+get_data_dump_signed_urls
+
+trigger_background_task(
+
+get_background_tasks(
+
+*/
 
 }
 
