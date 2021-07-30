@@ -10,9 +10,6 @@ This module implements the low level request logic of Crossing Minds API:
 */
 
 require_once ("exceptions.php");
-/*
-from .exceptions import ServerError, XMindsError
-*/
 
 class _BaseCrossingMindsApiRequest
 {
@@ -95,7 +92,7 @@ class _BaseCrossingMindsApiRequest
         );
         if(count($data))
             $options['http']['content'] = $this->_serialize_data($data);
-		if(isset($kwargs['timeout']))
+        if(isset($kwargs['timeout']))
             $options['http']['timeout'] = $kwargs['timeout']; //seconds
         if(count($params))
             $url .= "?".http_build_query($params);
@@ -110,7 +107,7 @@ class _BaseCrossingMindsApiRequest
         if ($status_code >= 500)
         {
             $exc_payload = $this->_parse_response($resp, True);
-			print_r([$status_code, $resp]);
+            print_r([$status_code, $resp]);
             //if ($exc_payload)
             //    logging.error(exc_payload);
             throw new ServerError();
@@ -120,11 +117,11 @@ class _BaseCrossingMindsApiRequest
             $data = $this->_parse_response($resp, True);
             print_r([$status_code, $resp]);
             try {
-            	$exc = XMinds_Error_from_code($data['error_code'], $data);
-			}
+                $exc = XMinds_Error_from_code($data['error_code'], $data);
+            }
             catch (Exception $err) {
                 $exc = new ServerError(['response'=> $data]);
-			}
+            }
             throw $exc;
         }
 

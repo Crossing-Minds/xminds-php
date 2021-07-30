@@ -4,7 +4,6 @@ xminds.api.client
 ~~~~~~~~~~~~~~~~~
 
 This module implements the requests for all API endpoints.
-The client handles the logic to automatically get a new JWT token using the refresh token
 */
 
 require_once ("apirequest.php");
@@ -25,7 +24,7 @@ class CrossingMindsApiClientImpl
             $this->b64_encode_bytes = True;
         }
         else
-            throw NotImplementedError('unknown serializer {serializer}');
+            throw NotImplementedError("unknown serializer {$serializer}");
         $this->api = new $cls($api_kwargs);
     }
 
@@ -40,7 +39,7 @@ class CrossingMindsApiClientImpl
         :param str last_name:
         :param str email:
         :param str password:
-        :returns: {'id': str}
+        :returns: ['id'=> str]
         */
         $path = 'accounts/individual/';
         $data = [
@@ -61,7 +60,7 @@ class CrossingMindsApiClientImpl
         :param str name:
         :param str password:
         :param str? role:
-        :returns: {'id': str}
+        :returns: ['id'=> str]
         */
         $path = 'accounts/service/';
         $data = [
@@ -106,19 +105,19 @@ class CrossingMindsApiClientImpl
 
         :returns: {
             'individual_accounts': [
-                {
-                    'first_name': str,
-                    'last_name': str,
-                    'email': str,
-                    'role': str,
-                    'verified': bool,
-                },
+                [
+                    'first_name'=> str,
+                    'last_name'=> str,
+                    'email'=> str,
+                    'role'=> str,
+                    'verified'=> bool,
+                ],
             ],
             'service_accounts': [
-                {
-                    'name': str,
-                    'role': str,
-                },
+                [
+                    'name'=> str,
+                    'role'=> str,
+                ],
             ],
         }
         */
@@ -137,16 +136,16 @@ class CrossingMindsApiClientImpl
         :param str password:
         :param str db_id:
         :param ID? frontend_user_id: user ID
-        :returns: {
-            'token': str,
-            'database': {
-                'id': str,
-                'name': str,
-                'description': str,
-                'item_id_type': str,
-                'user_id_type': str,
-            },
-        }
+        :returns: [
+            'token'=> str,
+            'database'=> [
+                'id'=> str,
+                'name'=> str,
+                'description'=> str,
+                'item_id_type'=> str,
+                'user_id_type'=> str,
+            ],
+        ]
         */
         $path = 'login/individual/';
         $data = [
@@ -166,16 +165,16 @@ class CrossingMindsApiClientImpl
         :param str password:
         :param str db_id:
         :param ID? frontend_user_id: user ID
-        :returns: {
-            'token': str,
-            'database': {
-                'id': str,
-                'name': str,
-                'description': str,
-                'item_id_type': str,
-                'user_id_type': str,
-            },
-        }
+        :returns: [
+            'token'=> str,
+            'database'=> [
+                'id'=> str,
+                'name'=> str,
+                'description'=> str,
+                'item_id_type'=> str,
+                'user_id_type'=> str,
+            ],
+        ]
         */
         $path = 'login/service/';
         $data = [
@@ -193,9 +192,9 @@ class CrossingMindsApiClientImpl
 
         :param str email:
         :param str password:
-        :returns: {
-            'token': str,
-        }
+        :returns: [
+            'token'=> str,
+        ]
         */
         $path = 'login/root/';
         $data = [
@@ -216,16 +215,16 @@ class CrossingMindsApiClientImpl
         Login again using a refresh token
 
         :param str? refresh_token: (default: $this->_refresh_token)
-        :returns: {
-            'token': str,
-            'database': {
-                'id': str,
-                'name': str,
-                'description': str,
-                'item_id_type': str,
-                'user_id_type': str,
-            },
-        }
+        :returns: [
+            'token'=> str,
+            'database'=> [
+                'id'=> str,
+                'name'=> str,
+                'description=> str,
+                'item_id_type'=> str,
+                'user_id_type'=> str,
+            ],
+        ]
         */
         $refresh_token = $refresh_token ?? $this->_refresh_token;
         $path = 'login/refresh-token/';
@@ -262,7 +261,7 @@ class CrossingMindsApiClientImpl
     {
         /*
         create, or apply deep partial update of meta-data
-        :param dict metadata: meta-data to store structured as unvalidated JSON-compatible dict
+        :param array metadata: meta-data to store structured as unvalidated JSON-compatible array
         :param bool? preserve: set to `True` to append values instead of replace as in RFC7396
         */
         $path = 'organizations/current/';
@@ -276,18 +275,18 @@ class CrossingMindsApiClientImpl
     {
         /*
         preview deep partial update of extra data, without changing any state
-        :param dict metadata: extra meta-data to store structured as unvalidated JSON-compatible dict
+        :param array metadata: extra meta-data to store structured as unvalidated JSON-compatible array
         :param bool? preserve: set to `True` to append values instead of replace as in RFC7396
-        :returns: {
-            'metadata_old': {
-                'description': str,
-                'extra': {**any-key: any-val},
-            },
-            'metadata_new': {
-                'description': str,
-                'extra': {**any-key: any-val},
-            },
-        }
+        :returns: [
+            'metadata_old': [
+                'description'=> str,
+                'extra'=> {**any-key=> any-val},
+            ],
+            'metadata_new': [
+                'description'=> str,
+                'extra'=> {**any-key=> any-val},
+            ],
+        ]
         */
         $path = 'organizations/current/preview/';
         $data = ['metadata'=> $metadata];
@@ -325,19 +324,19 @@ class CrossingMindsApiClientImpl
 
         :param int? amt: amount of databases by page (default: API default)
         :param int? page: page number (default: 1)
-        :returns: {
-            'has_next': bool,
-            'next_page': int,
-            'databases': [
-                {
-                    'id': int,
-                    'name': str,
-                    'description': str,
-                    'item_id_type': str,
-                    'user_id_type': str
-                },
+        :returns: [
+            'has_next'=> bool,
+            'next_page'=> int,
+            'databases'=> [
+                [
+                    'id'=> int,
+                    'name'=> str,
+                    'description'=> str,
+                    'item_id_type'=> str,
+                    'user_id_type'=> str
+                ],
             ]
-        }
+        ]
         */
         $path = 'databases/';
         $params = [];
@@ -353,19 +352,19 @@ class CrossingMindsApiClientImpl
         /*
         Get details on current database
 
-        :returns: {
-            'id': str,
-            'name': str,
-            'description': str,
-            'item_id_type': str,
-            'user_id_type': str,
-            'counters': {
-                'rating': int,
-                'user': int,
-                'item': int,
-            },
-            'metadata': {**any-key: any-val},
-        }
+        :returns: [
+            'id'=> str,
+            'name'=> str,
+            'description'=> str,
+            'item_id_type'=> str,
+            'user_id_type'=> str,
+            'counters'=> {
+                'rating'=> int,
+                'user'=> int,
+                'item'=> int,
+            ],
+            'metadata'=> {**any-key=> any-val},
+        ]
         */
         $path = 'databases/current/';
         return $this->api->get($path);
@@ -376,7 +375,7 @@ class CrossingMindsApiClientImpl
         /*
         update description, and apply deep partial update of extra meta-data
         :param str? description: description of DB
-        :param dict? metadata: extra data to store structured as unvalidated JSON-compatible dict
+        :param array? metadata: extra data to store structured as unvalidated JSON-compatible array
         :param bool? preserve: set to `True` to append values instead of replace as in RFC7396
         */
         $path = 'databases/current/';
@@ -396,18 +395,18 @@ class CrossingMindsApiClientImpl
         /*
         preview deep partial update of extra data, without changing any state
         :param str? description: description of DB
-        :param dict? metadata: extra data to store structured as unvalidated JSON-compatible dict
+        :param array? metadata: extra data to store structured as unvalidated JSON-compatible array
         :param bool? preserve: set to `True` to append values instead of replace as in RFC7396
-        :returns: {
-            'metadata_old': {
-                'description': str,
-                'metadata': {**any-key: any-val},
-            },
-            'metadata_new': {
-                'description': str,
-                'metadata': {**any-key: any-val},
-            },
-        }
+        :returns: [
+            'metadata_old'=> [
+                'description'=> str,
+                'metadata'=> {**any-key=> any-val},
+            ],
+            'metadata_new'=> [
+                'description'=> str,
+                'metadata'=> {**any-key=> any-val},
+            ],
+        ]
         */
         $path = 'databases/current/preview/';
         $data = [];
@@ -447,11 +446,11 @@ class CrossingMindsApiClientImpl
         Get one user-property.
 
         :param str property_name: property name
-        :returns: {
-            'property_name': str,
-            'value_type': str,
-            'repeated': bool,
-        }
+        :returns: [
+            'property_name'=> str,
+            'value_type'=> str,
+            'repeated'=> bool,
+        ]
         */
         $path = 'users-properties/'.$this->escape_url($property_name).'/';
         return $this->api->get($path);
@@ -462,13 +461,13 @@ class CrossingMindsApiClientImpl
         /*
         Get all user-properties for the current database.
 
-        :returns: {
-            'properties': [{
-                'property_name': str,
-                'value_type': str,
-                'repeated': bool,
-            }],
-        }
+        :returns: [
+            'properties'=> [[
+                'property_name'=> str,
+                'value_type'=> str,
+                'repeated'=> bool,
+            ]],
+        ]
         */
         $path = 'users-properties/';
         return $this->api->get($path);
@@ -511,12 +510,12 @@ class CrossingMindsApiClientImpl
         Get one user given its ID.
 
         :param ID user_id: user ID
-        :returns: {
-            'item': {
-                'id': ID,
-                *<property_name: property_value>,
-            }
-        }
+        :returns: [
+            'item'=> [
+                'id'=> ID,
+                *<property_name=> property_value>,
+            ]
+        ]
         */
         $user_id = $this->_userid2url($user_id);
         $path = "users/{$user_id}/";
@@ -534,19 +533,19 @@ class CrossingMindsApiClientImpl
 
         :param int? amt: amount to return (default: use the API default)
         :param str? cursor: Pagination cursor
-        :returns: {
-            'users': array with fields ['id': ID, *<property_name: value_type>]
+        :returns: [
+            'users'=> array with fields ['id'=> ID, *<property_name: value_type>]
                 contains only the non-repeated values,
-            'users_m2m': dict of arrays for repeated values:
+            'users_m2m'=> array of arrays for repeated values:
                 {
-                    *<repeated_property_name: {
-                        'name': str,
-                        'array': array with fields ['user_index': uint32, 'value_id': value_type],
+                    *<repeated_property_name=> {
+                        'name'=> str,
+                        'array'=> array with fields ['user_index': uint32, 'value_id': value_type],
                     }>
                 },
-            'has_next': bool,
-            'next_cursor': str, pagination cursor to use in next request to get more users,
-        }
+            'has_next'=> bool,
+            'next_cursor'=> str, pagination cursor to use in next request to get more users,
+        ]
         */
         $path = 'users-bulk/';
         $params = [];
@@ -565,7 +564,7 @@ class CrossingMindsApiClientImpl
         /*
         Create a new user, or update it if the ID already exists.
 
-        :param dict user: user ID and properties {'user_id': ID, *<property_name: property_value>}
+        :param array user: user ID and properties {'user_id': ID, *<property_name: property_value>}
         */
         $user = (array)($user);
         $user_id = $this->_userid2url($user['user_id']);
@@ -582,7 +581,7 @@ class CrossingMindsApiClientImpl
         /*
         Create many users in bulk, or update the ones for which the id already exist.
 
-        :param array users: array with fields ['id': ID, *<property_name: value_type>]
+        :param array users: array with fields ['id'=> ID, *<property_name=> value_type>]
             contains only the non-repeated values,
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
         */
@@ -603,7 +602,7 @@ class CrossingMindsApiClientImpl
         /*
         Partially update some properties of an user
 
-        :param dict user: user ID and properties {'user_id': ID, *<property_name: property_value>}
+        :param array user: user ID and properties ['user_id'=> ID, *<property_name=> property_value>]
         :param bool? create_if_missing: control whether an error should be returned or a new user
         should be created when the ``user_id`` does not already exist. (default: False)
         */
@@ -625,7 +624,7 @@ class CrossingMindsApiClientImpl
         /*
         Partially update some properties of many users.
 
-        :param array users: array with fields ['id': ID, *<property_name: value_type>]
+        :param array users: array with fields ['id'=> ID, *<property_name=> value_type>]
             contains only the non-repeated values,
         :param bool? create_if_missing: to control whether an error should be returned or new users
         should be created when the ``user_id`` does not already exist. (default: False)
@@ -666,11 +665,11 @@ class CrossingMindsApiClientImpl
         Get one item-property.
 
         :param str property_name: property name
-        :returns: {
-            'property_name': str,
-            'value_type': str,
-            'repeated': bool,
-        }
+        :returns: [
+            'property_name'=> str,
+            'value_type'=> str,
+            'repeated'=> bool,
+        ]
         */
         $path = "items-properties/{$this->escape_url($property_name)}/";
         return $this->api->get($path);
@@ -681,13 +680,13 @@ class CrossingMindsApiClientImpl
         /*
         Get all item-properties for the current database.
 
-        :returns: {
-            'properties': [{
-                'property_name': str,
-                'value_type': str,
-                'repeated': bool,
-            }],
-        }
+        :returns: [
+            'properties'=> [[
+                'property_name'=> str,
+                'value_type'=> str,
+                'repeated'=> bool,
+            ]],
+        ]
         */
         $path = 'items-properties/';
         return $this->api->get($path);
@@ -730,12 +729,12 @@ class CrossingMindsApiClientImpl
         Get one item given its ID.
 
         :param ID item_id: item ID
-        :returns: {
-            'item': {
-                'id': ID,
-                *<property_name: property_value>,
-            }
-        }
+        :returns: [
+            'item'=> [
+                'id'=> ID,
+                *<property_name=> property_value>,
+            ]
+        ]
         */
         $item_id = $this->_itemid2url($item_id);
         $path = "items/{$item_id}/";
@@ -753,17 +752,17 @@ class CrossingMindsApiClientImpl
         Instead, the missing items are simply not present in the response.
 
         :param ID-array items_id: items IDs
-        :returns: {
-            'items': array with fields ['id': ID, *<property_name: value_type>]
+        :returns: [
+            'items'=> array with fields ['id': ID, *<property_name: value_type>]
                 contains only the non-repeated values,
-            'items_m2m': dict of arrays for repeated values:
-                {
-                    *<repeated_property_name: {
-                        'name': str,
-                        'array': array with fields ['item_index': uint32, 'value_id': value_type],
-                    }>
-                }
-        }
+            'items_m2m'=> array of arrays for repeated values:
+                [
+                    *<repeated_property_name: [
+                        'name'=> str,
+                        'array'=> array with fields ['item_index'=> uint32, 'value_id'=> value_type],
+                    ]>
+                ]
+        ]
         */
         $items_id = $this->_itemid2body($items_id);
         $path = 'items-bulk/list/';
@@ -782,19 +781,19 @@ class CrossingMindsApiClientImpl
 
         :param int? amt: amount to return (default: use the API default)
         :param str? cursor: Pagination cursor
-        :returns: {
-            'items': array with fields ['id': ID, *<property_name: value_type>]
+        :returns: [
+            'items'=> array with fields ['id'=> ID, *<property_name=> value_type>]
                 contains only the non-repeated values,
-            'items_m2m': dict of arrays for repeated values:
-                {
-                    *<repeated_property_name: {
-                        'name': str,
-                        'array': array with fields ['item_index': uint32, 'value_id': value_type],
+            'items_m2m'=> array of arrays for repeated values:
+                [
+                    *<repeated_property_name=> {
+                        'name'=> str,
+                        'array'=> array with fields ['item_index'=> uint32, 'value_id'=> value_type],
                     }>
-                },
-            'has_next': bool,
-            'next_cursor': str, pagination cursor to use in next request to get more items,
-        }
+                ],
+            'has_next'=> bool,
+            'next_cursor'=> str, pagination cursor to use in next request to get more items,
+        ]
         */
         $path = 'items-bulk/';
         $params = [];
@@ -812,7 +811,7 @@ class CrossingMindsApiClientImpl
         /*
         Create a new item, or update it if the ID already exists.
 
-        :param dict item: item ID and properties {'item_id': ID, *<property_name: property_value>}
+        :param array item: item ID and properties ['item_id'=> ID, *<property_name=> property_value>]
         */
         $item = (array)$item;
         $item_id = $this->_itemid2url($item['item_id']);
@@ -829,7 +828,7 @@ class CrossingMindsApiClientImpl
         /*
         Create many items in bulk, or update the ones for which the id already exist.
 
-        :param array items: array with fields ['id': ID, *<property_name: value_type>]
+        :param array items: array with fields ['id'=> ID, *<property_name=> value_type>]
             contains only the non-repeated values,
         :param int? chunk_size: split the requests in chunks of this size (default: 1K)
         */
@@ -850,7 +849,7 @@ class CrossingMindsApiClientImpl
         /*
         Partially update some properties of an item.
 
-        :param dict item: item ID and properties {'item_id': ID, *<property_name: property_value>}
+        :param array item: item ID and properties ['item_id'=> ID, *<property_name=> property_value>]
         :param bool? create_if_missing: control whether an error should be returned or a new item
         should be created when the ``item_id`` does not already exist. (default: false)
         */
@@ -873,7 +872,7 @@ class CrossingMindsApiClientImpl
         /*
         Partially update some properties of many items.
 
-        :param array items: array with fields ['id': ID, *<property_name: value_type>]
+        :param array items: array with fields ['id'=> ID, *<property_name=> value_type>]
             contains only the non-repeated values,
         :param bool? create_if_missing: control whether an error should be returned or a new item
         should be created when the ``item_id`` does not already exist. (default: false)
@@ -894,7 +893,7 @@ class CrossingMindsApiClientImpl
 
     function _chunk_items($items, $chunk_size)
     {
-        // cast dict to list of dict
+        // cast array to list of array
         $n_chunks = (int)(ceil(count($items) / $chunk_size));
         $out = [];
         for ($i=0; $i<$n_chunks; $i++)
@@ -919,10 +918,10 @@ class CrossingMindsApiClientImpl
         :param int? amt: amount to return (default: use the API default)
         :param str? cursor: Pagination cursor
         :param list-str? filters: Filter by properties. Filter format: ['<PROP_NAME>:<OPERATOR>:<OPTIONAL_VALUE>',...]
-        :returns: {
-            'items_id': array of items IDs,
-            'next_cursor': str, pagination cursor to use in next request to get more items,
-        }
+        :returns: [
+            'items_id'=> array of items IDs,
+            'next_cursor'=> str, pagination cursor to use in next request to get more items,
+        ]
         */
         $item_id = $this->_itemid2url($item_id);
         $path = "recommendation/items/{$item_id}/items/";
@@ -947,15 +946,15 @@ class CrossingMindsApiClientImpl
         Get items recommendations given the ratings of an anonymous session.
 
         :param array? ratings: ratings array with fields ['item_id': ID, 'rating': float]
-        :param dict? user_properties: user properties {**property_name: property_value(s)}
+        :param array? user_properties: user properties {**property_name: property_value(s)}
         :param int? amt: amount to return (default: use the API default)
         :param str? cursor: Pagination cursor
         :param list-str? filters: Filter by properties. Filter format: ['<PROP_NAME>:<OPERATOR>:<OPTIONAL_VALUE>',...]
         :param bool? exclude_rated_items: exclude rated items from response
-        :returns: {
-            'items_id': array of items IDs,
-            'next_cursor': str, pagination cursor to use in next request to get more items,
-        }
+        :returns: [
+            'items_id'=> array of items IDs,
+            'next_cursor'=> str, pagination cursor to use in next request to get more items,
+        ]
         */
         $path = 'recommendation/sessions/items/';
         $data = [];
@@ -989,10 +988,10 @@ class CrossingMindsApiClientImpl
         :param str? cursor: Pagination cursor
         :param list-str? filters: Filter by properties. Filter format: ['<PROP_NAME>:<OPERATOR>:<OPTIONAL_VALUE>',...]
         :param bool? exclude_rated_items: exclude rated items from response
-        :returns: {
-            'items_id': array of items IDs,
-            'next_cursor': str, pagination cursor to use in next request to get more items,
-        }
+        :returns: [
+            'items_id'=> array of items IDs,
+            'next_cursor'=> str, pagination cursor to use in next request to get more items,
+        ]
         */
         $user_id = $this->_userid2url($user_id);
         $path = "recommendation/users/{$user_id}/items/";
@@ -1042,7 +1041,7 @@ class CrossingMindsApiClientImpl
 
         :param ID user_id: user ID
         :param array ratings: ratings array with fields:
-            ['item_id': ID, 'rating': float, 'timestamp': float]
+            ['item_id'=> ID, 'rating'=> float, 'timestamp'=> float]
         */
         $user_id = $this->_userid2url($user_id);
         $path = "users/{$user_id}/ratings/";
@@ -1058,7 +1057,7 @@ class CrossingMindsApiClientImpl
         Create or update large bulks of ratings for many users and many items.
 
         :param array ratings: ratings array with fields:
-            ['user_id': ID, 'item_id': ID, 'rating': float, 'timestamp': float]
+            ['user_id'=> ID, 'item_id'=> ID, 'rating'=> float, 'timestamp'=> float]
         :param int? chunk_size: split the requests in chunks of this size (default: 16K)
         */
         $path = 'ratings-bulk/';
@@ -1083,12 +1082,12 @@ class CrossingMindsApiClientImpl
         :param ID user_id: user ID
         :param int? amt: amount of ratings by page (default: API default)
         :param int? page: page number (default: 1)
-        :returns: {
-            'has_next': bool,
-            'next_page': int,
-            'user_ratings': ratings array with fields
-                ['item_id': ID, 'rating': float, 'timestamp': float]
-        }
+        :returns: [
+            'has_next'=> bool,
+            'next_page'=> int,
+            'user_ratings'=> ratings array with fields
+                ['item_id'=> ID, 'rating'=> float, 'timestamp'=> float]
+        ]
         */
         $user_id = $this->_userid2url($user_id);
         $path = "users/{$user_id}/ratings/";
@@ -1109,12 +1108,12 @@ class CrossingMindsApiClientImpl
 
         :param int? amt: amount to return (default: use the API default)
         :param str? cursor: Pagination cursor
-        :returns: {
-            'has_next': bool,
-            'next_cursor': str,
-            'ratings': array with fields
-                ['item_id': ID, 'user_id': ID, 'rating': float, 'timestamp': float]
-        }
+        :returns: [
+            'has_next'=> bool,
+            'next_cursor'=> str,
+            'ratings'=> array with fields
+                ['item_id'=> ID, 'user_id'=> ID, 'rating'=> float, 'timestamp'=> float]
+        ]
         */
         $path = 'ratings-bulk/';
         $params = [];
@@ -1185,7 +1184,7 @@ class CrossingMindsApiClientImpl
         Inferred ratings will be created or updated for all tuples (user_id, item_id).
 
         :param array interactions: interactions array with fields:
-            ['user_id': ID, 'item_id': ID, 'interaction_type': str, 'timestamp': float]
+            ['user_id'=> ID, 'item_id'=> ID, 'interaction_type'=> str, 'timestamp'=> float]
         :param int? chunk_size: split the requests in chunks of this size (default: 16K)
         */
         $path = 'interactions-bulk/';
@@ -1212,10 +1211,10 @@ class CrossingMindsApiClientImpl
         :param str? name: filename
         :param str? content_type:
         :param str? resource: values allowed are `items`, `users`, `ratings` and `ratings_implicit`.
-        :returns: {
-            'url_upload': str,
-            'url_report': str,
-        }
+        :returns: [
+            'url_upload'=> str,
+            'url_report'=> str,
+        ]
         */
         $path = 'data-dump-storage/signed-url/';
         $params = ['name'=> $name,
@@ -1233,10 +1232,10 @@ class CrossingMindsApiClientImpl
         You should not have to call this endpoint yourself, as this is done automatically.
 
         :param str task_name: for instance ``'ml_model_retrain'``
-        :param dict? payload: optional task payload
-        :returns: {
-            'task_id': str,
-        }
+        :param array? payload: optional task payload
+        :returns: [
+            'task_id'=> str,
+        ]
         :raises: DuplicatedError with error name 'TASK_ALREADY_RUNNING'
             if this task is already running
         */
@@ -1254,11 +1253,11 @@ class CrossingMindsApiClientImpl
 
         :param str task_name: for instance ``'ml_model_retrain'``
         :returns: {
-            'tasks': [{
-                'name': string, Task name
-                'start_time': int, Start timestamp
-                'details': dict, Execution details, like progress message
-            }],
+            'tasks'=> [[
+                'name'=> string, Task name
+                'start_time'=> int, Start timestamp
+                'details'=> array, Execution details, like progress message
+            ]],
         }
         */
         $path = "tasks/{$this->escape_url($task_name)}/recents/";
@@ -1447,6 +1446,10 @@ function RequireLogin($obj, $method, $args)
 
 class CrossingMindsApiClient extends CrossingMindsApiClientImpl
 {
+    /*
+    The client handles the logic to automatically get a new JWT token using the refresh token
+    */
+
     function __construct($api_kwargs)
     {
         parent::__construct($api_kwargs);
