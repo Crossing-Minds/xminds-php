@@ -971,7 +971,7 @@ class CrossingMindsApiClientImpl
         if ($exclude_rated_items != null)
             $data['exclude_rated_items'] = $exclude_rated_items;
         $resp = $this->api->post($path, $data);
-        $resp['items_id'] = $this->_body2itemid(resp['items_id']);
+        $resp['items_id'] = $this->_body2itemid($resp['items_id']);
         return $resp;
     }
 

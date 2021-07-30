@@ -4,7 +4,7 @@ require_once ("xminds/api/client.php");
 
 $client = new CrossingMindsApiClient(['host'=>"https://staging-api.crossingminds.com/", 'serializer'=>"json"]);
 //$client->login_root("root-php-client@test-php.com", "In2p23NKJiPTpQPR");
-$client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
+$client->login_individual("tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l", "6OCbeqY7xpThY4hZPjWX-A"); //7NweEa_OXE6n6BcLCh4cyg
 //$client->login_service("Tim Service Account", "fW68l5NZYj622K4jTstB", "44RtT3DMxeZSP6Wh50ilCg"); //7NweEa_OXE6n6BcLCh4cyg
 
 //print ($client->jwt_token());
@@ -17,7 +17,7 @@ print_r ($d);
 //$ret = $client->create_individual_account("Tim", "Sheerman-Chase", "tim.sheerman-chase@toptal.com", "uHz459KNbqwkDICNuQ0l");
 //$ret = $client->create_individual_account("Tim 2", "Sheerman-Chase 2", "orders2008@sheerman-chase.org.uk", "e7NR1J6ov8BGajz2gMU9"); //znCy44vyTWnr9WduH5KIsw
 //$ret = $client->create_service_account("Tim Service Account", "fW68l5NZYj622K4jTstB"); //TFPQ_NmQgCkhEGFeLhlt-w
-//$ret = $client->create_database("Tim test db", "Testing");
+//$ret = $client->create_database("Tim test db2", "Testing");
 //$ret = $client->resend_verification_code("orders2008@sheerman-chase.org.uk");
 //$ret = $client->verify_account("7592816a9f4817b2b7240c9946017bc84573bd68", "orders2008@sheerman-chase.org.uk");
 //$ret = $client->list_accounts();
@@ -66,7 +66,7 @@ print_r ($d);
 //$ret = $client->create_item_property("feature1", "uint32");
 //$ret = $client->create_item_property("feature2", "unicode", true);
 //$ret = $client->get_item_property("feature1");
-$ret = $client->list_item_properties();
+//$ret = $client->list_item_properties();
 //$ret = $client->delete_item_property("feature1");
 
 //$ret = $client->create_or_update_item(['item_id'=>4264735, 'feature1'=>68543]);
@@ -100,9 +100,9 @@ $ret = $client->list_item_properties();
           ]
       ]);*/
 
-//$ret = $client->get_reco_item_to_items(784567); //Not tested
-//$ret = $client->get_reco_session_to_items(); //Not tested
-//$ret = $client->get_reco_user_to_items(784567); //Not tested
+//$ret = $client->get_reco_item_to_items(50);
+//$ret = $client->get_reco_session_to_items([['item_id'=> 84, 'rating'=> 2.4], ['item_id'=> 22, 'rating'=> 5.4]]);
+//$ret = $client->get_reco_user_to_items(80);
 
 //$ret = $client->create_or_update_rating(464737, 784567, 5);
 //$ret = $client->create_or_update_user_ratings_bulk(464737, [['item_id'=> 464737, 'rating'=> 2.4, 'timestamp'=>1588812345], ['item_id'=> 784567, 'rating'=> 3.2, 'timestamp'=>1588812345]]);
@@ -111,7 +111,7 @@ $ret = $client->list_item_properties();
 //$ret = $client->delete_rating(464737, 784567);
 //$ret = $client->delete_user_ratings(464737);
 
-//$ret = $client->create_interaction(464737, 784567, "view"); //Not tested
+//$ret = $client->create_interaction(33, 65, "view"); //Not tested
 //$ret = $client->create_interactions_bulk([['user_id'=> 464737, 'item_id'=> 464737, 'interaction_type'=> "view", 'timestamp'=> 1588812345], ['user_id'=> 464737, 'item_id'=> 784567, 'interaction_type'=> "view", 'timestamp'=> 1588812345]]); //Not tested
 
 
