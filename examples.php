@@ -66,7 +66,7 @@ print_r ($d);
 //$ret = $client->create_item_property("feature1", "uint32");
 //$ret = $client->create_item_property("feature2", "unicode", true);
 //$ret = $client->get_item_property("feature1");
-//$ret = $client->list_item_properties();
+$ret = $client->list_item_properties();
 //$ret = $client->delete_item_property("feature1");
 
 //$ret = $client->create_or_update_item(['item_id'=>4264735, 'feature1'=>68543]);
@@ -99,17 +99,6 @@ print_r ($d);
               "feature1"=> 34,
           ]
       ]);*/
-
-$ret = $client->partial_update_items_bulk([
-          [
-              "item_id"=> "c784567",
-              "feature1"=> 27,
-          ],
-          [
-              "item_id"=> "c464737",
-              "feature1"=> 34,
-          ]
-      ]);
 
 //$ret = $client->get_reco_item_to_items(784567); //Not tested
 //$ret = $client->get_reco_session_to_items(); //Not tested
