@@ -15,6 +15,7 @@ Getting Started
    require_once ("xminds/api/client.php");
 
    $client = new CrossingMindsApiClient();
+
    $client->login_individual("username", "password", "database_id");
 
    $d = $client->get_all_databases();
