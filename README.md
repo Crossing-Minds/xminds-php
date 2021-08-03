@@ -1,2 +1,0 @@
-# xminds-php
-
